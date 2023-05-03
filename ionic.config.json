@@ -1,0 +1,7 @@
+{
+  "name": "ion7-shop",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
