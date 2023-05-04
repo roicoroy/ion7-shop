@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="submitForm()">
+        <ion-icon name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+
+  <ion-item lines="none" *ngFor="let item of availableLanguages" (click)="selectLanguage(item)">
+    <ion-col size="12">
+      <ion-radio-group [value]="selectedLanguage">
+        <ion-label>{{ item.name }}</ion-label>
+        <ion-radio [value]="item.code"></ion-radio>
+      </ion-radio-group>
+    </ion-col>
+  </ion-item>
+
+</ion-content>

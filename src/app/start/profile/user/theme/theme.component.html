@@ -1,0 +1,5 @@
+<ion-button size="small" fill="clear">
+  <ion-icon [name]=" appDarkModeIcon$ | async "></ion-icon>
+  <ion-toggle aria-label="Dark Mode" slot="end" [checked]="appDarkMode$ | async"
+    (ionChange)="onChangeTheme($event)"></ion-toggle>
+</ion-button>

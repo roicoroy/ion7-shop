@@ -1,0 +1,14 @@
+
+  <ion-row class="categories-list">
+    <ion-col *ngFor="let category of categoriesData" class="category-item travel-category" size="12" (click)="navigate(category.url)">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="category?.image">
+        <app-aspect-ratio [ratio]="{w:75, h:49}">
+          <a class="category-anchor">
+            <h2 class="category-title">
+              {{ category.title | uppercase }}
+            </h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+  </ion-row>

@@ -1960,6 +1960,55 @@
   resolved "https://registry.npmjs.org/@ngtools/webpack/-/webpack-16.0.0.tgz"
   integrity sha512-I5zjGtJu2wwIdM+OFUHXezmwTJ0wpParVJgCxR0cLd0CIbpRYSjOSZQN/nR9ZnTKAI5uFZ3MM2p/VRQGUUHUcw==
 
+"@ngx-translate/core@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.npmjs.org/@ngx-translate/core/-/core-14.0.0.tgz"
+  integrity sha512-UevdwNCXMRCdJv//0kC8h2eSfmi02r29xeE8E9gJ1Al4D4jEJ7eiLPdjslTMc21oJNGguqqWeEVjf64SFtvw2w==
+  dependencies:
+    tslib "^2.3.0"
+
+"@ngx-translate/http-loader@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.npmjs.org/@ngx-translate/http-loader/-/http-loader-7.0.0.tgz"
+  integrity sha512-j+NpXXlcGVdyUNyY/qsJrqqeAdJdizCd+GKh3usXExSqy1aE9866jlAIL+xrfDU4w+LiMoma5pgE4emvFebZmA==
+  dependencies:
+    tslib "^2.3.0"
+
+"@ngxs/devtools-plugin@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.npmjs.org/@ngxs/devtools-plugin/-/devtools-plugin-3.8.0.tgz"
+  integrity sha512-yJTpgJfFwFLb/ctkJFvVn5PGLU4g96tTThhVN9cPmmbLqvzyhr7G7YBMY90VkaWdB9WmctfzHuHeh7EZCoaAMQ==
+  dependencies:
+    tslib "^2.2.0"
+
+"@ngxs/form-plugin@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.npmjs.org/@ngxs/form-plugin/-/form-plugin-3.8.0.tgz"
+  integrity sha512-3AevWar7BMvJctPUZTM6dOFouYd5sdML0IK2xPUJ8o0iEZuIn0S7chrrtXaWOuYV2Cc/CTaiCh1bUzQww69qqA==
+  dependencies:
+    tslib "^2.2.0"
+
+"@ngxs/logger-plugin@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.npmjs.org/@ngxs/logger-plugin/-/logger-plugin-3.8.0.tgz"
+  integrity sha512-jQX7kKAZdTbwlX6pFIENvNRrwbS/B/Insh7v4TX57xQ+BiJFZIQEazYm3QIO02drRl1vMZLbLD3324lfozGnQA==
+  dependencies:
+    tslib "^2.2.0"
+
+"@ngxs/storage-plugin@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.npmjs.org/@ngxs/storage-plugin/-/storage-plugin-3.8.0.tgz"
+  integrity sha512-uYjfp3R8cJLFceiBAaveoIdnUo9DgZLfizCUI1tPCCriTAK3hv8K3GgpHeCLJR3MBv76a44fKdc1ZpMaxcVsHw==
+  dependencies:
+    tslib "^2.2.0"
+
+"@ngxs/store@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.npmjs.org/@ngxs/store/-/store-3.8.0.tgz"
+  integrity sha512-ZIVM2ftudeB3VSjULJjb31RS3WKYVgs/67IHdDjukn1S0X8ZRk07QNH6cUCfUB5h345sMLCwliwVuqh+IXbYSw==
+  dependencies:
+    tslib "^2.2.0"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -2091,6 +2140,11 @@
   version "3.2.2"
   resolved "https://registry.npmjs.org/@stencil/core/-/core-3.2.2.tgz"
   integrity sha512-wXb9cVWL0T3cTwYLveekdTFCRGx6+9hpVDEXna+N8K8OPoW6xtFAHRLv+LjOM7k59PkA8MG3IinAfV7Y+xa0Hw==
+
+"@stripe/stripe-js@^1.52.1":
+  version "1.52.1"
+  resolved "https://registry.npmjs.org/@stripe/stripe-js/-/stripe-js-1.52.1.tgz"
+  integrity sha512-fza40OPSpGQlFxc5TZWiYC/6Lk89Sep1fLuv9ss33YS6lCAF8UZbfA1E6W+lwO4c7WRKZIZumHIEbPJfP/O9uw==
 
 "@tootallnate/once@2":
   version "2.0.0"
@@ -8009,6 +8063,11 @@ sprintf-js@~1.0.2:
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
   integrity sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==
 
+ssr-window@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.npmjs.org/ssr-window/-/ssr-window-4.0.2.tgz"
+  integrity sha512-ISv/Ch+ig7SOtw7G2+qkwfVASzazUnvlDTwypdLoPoySv+6MqlOV10VwPSE6EWkGjhW50lUmghPmpYZXMu/+AQ==
+
 ssri@^10.0.0:
   version "10.0.4"
   resolved "https://registry.npmjs.org/ssri/-/ssri-10.0.4.tgz"
@@ -8195,6 +8254,13 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
+swiper@^9.2.4:
+  version "9.2.4"
+  resolved "https://registry.npmjs.org/swiper/-/swiper-9.2.4.tgz"
+  integrity sha512-L7y3K/iiMXNYQ94FbfcJn7jex4QPnS4+voXGupTdC+UHW4XrR40QDdm4c9hXJ+Br0Il7PP0vP1W3goM9/Ly6Sg==
+  dependencies:
+    ssr-window "^4.0.2"
+
 symbol-observable@4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/symbol-observable/-/symbol-observable-4.0.0.tgz"
@@ -8362,7 +8428,7 @@ tslib@^1.9.0:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.1, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.4.0, tslib@2.5.0:
+tslib@^2.0.1, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.0, tslib@^2.4.0, tslib@2.5.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
   integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==

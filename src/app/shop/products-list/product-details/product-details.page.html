@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/shop/tabs/products-list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Product Details</ion-title>
+    <ion-buttons slot="end">
+      <cart-menu></cart-menu>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="viewState$ | async as vs" class="product-details-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        Product Details
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-row class="slide-inner-row">
+    <swiper-container #swiper class="details-slides">
+      <swiper-slide *ngFor="let image of vs?.selectedProduct?.images">
+        <app-image-shell animation="spinner" class="showcase-image" [src]="image.url">
+          <app-aspect-ratio [ratio]="{w:24, h:25}">
+          </app-aspect-ratio>
+        </app-image-shell>
+      </swiper-slide>
+    </swiper-container>
+  </ion-row>
+
+  <div class="ion-padding">
+    <h3 class="details-name">
+      <app-text-shell animation="gradient" [data]="vs?.selectedProduct?.title"></app-text-shell>
+    </h3>
+    <span class="details-brand">
+      <app-text-shell animation="gradient" [data]="vs?.selectedProduct?.description"></app-text-shell>
+    </span>
+  </div>
+
+  <ion-row>
+    <ion-col size="12">
+      <ion-item>
+        <ion-buttons>
+          <ion-button *ngFor="let option of vs?.selectedProduct?.variants"
+            [color]="selectedOptionId === option.id ? 'primary' : 'medium'" (click)="onSelectChange(option)"
+            expand="block" fill="solid" shape="round">
+            {{ option?.title }}
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-col>
+
+    <ion-col *ngIf="optionsVariants.options?.length > 0">
+      <ion-item>
+        <ion-buttons slot="start" *ngFor="let option of optionsVariants.options">
+          <ion-button expand="block" fill="solid" shape="round"
+            [color]="selectedVariantId === option.variant_id ? 'primary' : 'medium'" (click)="onSelectVariant(option)">
+            <p>{{ option.value }}</p>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item>
+        <ion-label expand="block" fill="solid" shape="round" *ngFor="let price of optionsVariants.prices"
+          [color]="selectedVariantId === price.variant_id ? 'primary' : 'medium'" (click)="onSelectVariant(price)">
+          <ion-text>{{ price.amount | currency: price.currency_code}}</ion-text>
+        </ion-label>
+      </ion-item>
+
+    </ion-col>
+  </ion-row>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="12" class="action-col ion-text-center">
+        <app-counter-input #counterInput></app-counter-input>
+      </ion-col>
+      <ion-col size="12">
+        <ion-button (click)="addToCart()" class="add-to-cart-btn" color="dark" expand="block" fill="solid">
+          Add to cart
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,30 @@
+// :host {
+//   border: 2px solid #0ec535;
+//   display: block;
+//   padding: 12px;
+//   margin-bottom: 12px;
+
+//   ion-input {
+//     border: 2px solid #0ec535;
+//   }
+// }
+
+
+.toggle-list {
+  .toggle-item {
+    --padding-start: var(--page-margin);
+    --padding-end: var(--page-margin);
+    --inner-padding-end: 0px;
+
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      color: var(--ion-color-medium);
+    }
+
+    ion-toggle {
+      padding-inline-end: 0px;
+    }
+  }
+}

@@ -1,0 +1,117 @@
+<ion-content class="filters-content">
+  <ion-item-group class="filters-group">
+
+
+
+    <ion-item-divider>
+      <ion-label>Language (Radio Tags)</ion-label>
+    </ion-item-divider>
+    <form [formGroup]="radioTagsForm">
+      <ion-radio-group formControlName="selected_option">
+        <ion-row class="radio-tags">
+          <ion-item class="radio-tag" lines="none">
+            <ion-label class="tag-label">
+              English
+            </ion-label>
+            <ion-radio value="en"></ion-radio>
+          </ion-item>
+          <ion-item class="radio-tag" lines="none">
+            <ion-label class="tag-label">
+              Portuguese
+            </ion-label>
+            <ion-radio value="pt"></ion-radio>
+          </ion-item>
+        </ion-row>
+      </ion-radio-group>
+    </form>
+
+    <ion-item-divider>
+      <ion-label>Toggle</ion-label>
+    </ion-item-divider>
+    <form [formGroup]="switchersForm">
+      <ion-list class="toggle-list" lines="full">
+        <ion-item class="toggle-item">
+          <ion-label class="toggle-label">FCM Notifications</ion-label>
+          <ion-toggle color="secondary" formControlName="notifications"></ion-toggle>
+        </ion-item>
+      </ion-list>
+    </form>
+
+    <ion-item-divider>
+      <ion-label>Color chooser</ion-label>
+    </ion-item-divider>
+    <form [formGroup]="radioColorForm">
+      <ion-radio-group formControlName="selected_color">
+        <ion-row class="color-radio-group">
+          <ion-item class="color-radio" style="--color-radio-background: #fc6161;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-label class="color-label">Red</ion-label>
+                <ion-radio value="#fc6161"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+          <ion-item class="color-radio" style="--color-radio-background: #fc9961;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-radio value="#fc9961"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+          <ion-item class="color-radio" style="--color-radio-background: #fcea61;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-radio value="#fcea61" disabled="true"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+          <ion-item class="color-radio" style="--color-radio-background: #affc61;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-radio value="#affc61"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+          <ion-item class="color-radio" style="--color-radio-background: #61fcc5;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-radio value="#61fcc5"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+          <ion-item class="color-radio" style="--color-radio-background: #fc61ad;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-radio value="#fc61ad"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+          <ion-item class="color-radio" style="--color-radio-background: #b561fc;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-label class="color-label">Purple</ion-label>
+                <ion-radio value="#b561fc"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+          <ion-item class="color-radio" style="--color-radio-background: #6182fc;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-label class="color-label">Blue</ion-label>
+                <ion-radio value="#6182fc"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+          <ion-item class="color-radio" style="--color-radio-background: #61d1fc;">
+            <app-aspect-ratio [ratio]="{w:1, h:1}">
+              <div class="color-radio-inner-wrapper">
+                <ion-radio value="#61d1fc"></ion-radio>
+              </div>
+            </app-aspect-ratio>
+          </ion-item>
+        </ion-row>
+      </ion-radio-group>
+    </form>
+
+  </ion-item-group>
+</ion-content>

@@ -1,0 +1,26 @@
+<ion-header [translucent]="true" *ngIf="viewState$ | async as vs">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="toggleMenu()">
+                <ion-icon name="menu"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <!-- <ion-buttons *ngIf="true" slot="end">
+            <ion-button (click)="logout()">
+                Logout
+            </ion-button>
+        </ion-buttons>
+         -->
+         <ion-buttons *ngIf="vs.user === null" slot="end">
+            <ion-button (click)="login()" expand="block" fill="clear" shape="round">
+                Login
+            </ion-button>
+        </ion-buttons>
+        <ion-avatar slot="end" *ngIf="vs.user">
+            <img [src]="vs.user?.avatar.url" />
+        </ion-avatar>
+        <ion-buttons slot="end">
+            <cart-menu></cart-menu>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>

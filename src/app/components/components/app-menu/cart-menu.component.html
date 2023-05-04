@@ -1,0 +1,8 @@
+<ion-button (click)="closeCartMenu(menuId)">
+  <ion-icon [name]="icon" color="dark"></ion-icon>
+  <ion-badge color="danger" *ngIf="viewState$ | async as vs">
+    <span *ngIf="vs?.cart">
+      {{ vs.cart.items?.length }}
+    </span>
+  </ion-badge>
+</ion-button>

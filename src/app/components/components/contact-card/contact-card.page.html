@@ -1,0 +1,45 @@
+
+
+
+<ion-grid class="contact-card-content">
+  <ion-row class="user-details-wrapper">
+
+    <ion-col size="4">
+      <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+        <app-image-shell class="user-avatar" animation="spinner" [src]="'./assets/sample-images/notifications/100x100Notification2.jpg'" [alt]="'notification image'"></app-image-shell>
+      </app-aspect-ratio>
+    </ion-col>
+
+    <ion-col class="user-info-wrapper" size="8">
+      <h3 class="user-name">
+        <ion-input clearInput="true" type="text" placeholder="Claire Hale" value="Claire Hale"></ion-input>
+      </h3>
+      <h5 class="user-handle">@clairehale</h5>
+    </ion-col>
+
+  </ion-row>
+
+  <ion-row class="user-preferences-wrapper ion-margin">
+    <ion-col size="12">
+      <h4 class="preference-name">Mobile</h4>
+      <p class="preference-value">
+        +1-202-555-0102
+      </p>
+    </ion-col>
+    <ion-col size="12">
+      <h4 class="preference-name">Email</h4>
+      <p class="preference-value">
+        clairhale@ionic.com
+      </p>
+    </ion-col>
+    <ion-col size="12">
+      <h4 class="preference-name">Address</h4>
+      <p class="preference-value">
+        921 Church St, San Francisco, CA
+        <br/>
+        94114, USA
+      </p>
+    </ion-col>
+  </ion-row>
+
+</ion-grid>

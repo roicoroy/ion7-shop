@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-buttons slot="start">
+                <ion-back-button defaultHref="start/tabs/profile"></ion-back-button>
+            </ion-buttons>
+        </ion-buttons>
+        <ion-title>
+            Orders
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" class="ion-padding" *ngIf="viewState$ | async as vs">
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">
+                Orders
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-grid>
+        <ion-row *ngIf="vs.isLoggedIn; else loggedOut">
+            <ion-col size="12">
+                <ion-list>
+                    <ion-list-header>
+                        <ion-label>User Information</ion-label>
+                    </ion-list-header>
+                    <ion-item>
+                        <ion-row>
+                            <ion-col size="12">
+                                <ion-label>
+                                    Id: {{ vs.customer?.id }}
+                                </ion-label>
+                            </ion-col>
+                            <ion-col size="12">
+                                <ion-label>
+                                    Email: {{ vs.customer?.email }}
+                                </ion-label>
+                            </ion-col>
+                        </ion-row>
+                    </ion-item>
+                </ion-list>
+
+                <ion-list>
+                    <ion-list-header>
+                        <ion-label> Customer Orders </ion-label>
+                    </ion-list-header>
+
+
+                    <ion-item *ngFor="let order of vs.customer?.orders">
+                        <ion-button (click)="openOrderDetails(order.id)" expand="block" fill="clear" shape="round">
+                            {{ order.created_at | date }}
+                        </ion-button>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+        </ion-row>
+        <ng-template #loggedOut>
+            <ion-row class="ion-text-center">
+                <ion-col size="12">
+                    login please..
+                </ion-col>
+            </ion-row>
+        </ng-template>
+    </ion-grid>
+</ion-content>

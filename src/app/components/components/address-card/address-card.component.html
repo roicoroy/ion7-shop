@@ -1,0 +1,15 @@
+<ion-card-header *ngIf="address !== null">
+  <ion-card-subtitle>
+    {{ address?.first_name }}
+  </ion-card-subtitle>
+  <ion-card-title>
+    {{ address?.last_name }}
+  </ion-card-title>
+</ion-card-header>
+<ion-card-content *ngIf="address !== null">
+  {{ address?.address_1 }}
+  {{ address?.address_2 }}
+  {{ address?.country_code }}
+  {{ address?.postal_code }}
+  {{ address?.phone }}
+</ion-card-content>
