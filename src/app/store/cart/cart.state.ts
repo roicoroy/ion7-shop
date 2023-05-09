@@ -190,7 +190,7 @@ export class CartState {
                 cart: cartRes?.cart,
             });
             this.store.dispatch(new CartActions.GetMedusaCart(cartId));
-            this.store.dispatch(new AuthStateActions.getMedusaSession());
+            this.store.dispatch(new AuthStateActions.GetSession());
         }
         catch (err: any) {
             if (err) {
@@ -231,7 +231,7 @@ export class CartState {
             ctx.patchState({
                 cart: cart?.cart,
             });
-            this.store.dispatch(new AuthStateActions.getMedusaSession());
+            this.store.dispatch(new AuthStateActions.GetSession());
         }
         catch (err: any) {
             if (err) {

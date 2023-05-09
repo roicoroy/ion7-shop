@@ -1,12 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { Action, State, StateContext, Store } from '@ngxs/store';
 import { EmailPasswordActions } from './email-password.actions';
-import { catchError, throwError } from 'rxjs';
-import { AuthStateActions } from '../auth.actions';
-import { IAuth0StateModel } from '../auth0/auth0.state';
+import { Observable, catchError, map, switchMap, tap, throwError } from 'rxjs';
 import { EmailPasswordService } from './email-password.service';
 import { UtilityService } from 'src/app/shared/services/utility/utility.service';
-import { ErrorLoggingActions } from '../../error-logging/error-logging.actions';
+import { IUser } from 'src/app/shared/types/models/User';
+import { AuthStateActions } from '../auth.actions';
 
 export class IEmailPasswordStateModel { }
 
@@ -21,27 +20,23 @@ export class EmailPasswordState {
     private utility = inject(UtilityService);
 
     @Action(EmailPasswordActions.LoginEmailPassword)
-    async loginEmailPassword(ctx: StateContext<IAuth0StateModel>, { email, password }: EmailPasswordActions.LoginEmailPassword) {
-        this.emailPasswordService.loginEmailPassword(email, password)
+    async loginEmailPassword(ctx: StateContext<any>, { email, password }: EmailPasswordActions.LoginEmailPassword) {
+        return this.emailPasswordService.loginEmailPassword(email, password)
             .pipe(
+                switchMap((user: any) => {
+                    return this.store.dispatch(new AuthStateActions.SetAuthState(user));
+                }),
                 catchError(err => {
-                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
                     return throwError(() => new Error(JSON.stringify(err)));
-                })
+                }),
             )
-            .subscribe((user: any) => {
-                if (user) {
-                    this.store.dispatch(new AuthStateActions.SetAuthState(user));
-                }
-            });
     }
     @Action(EmailPasswordActions.RegisterUser)
-    async registerUser(ctx: StateContext<IAuth0StateModel>, { registerForm }: EmailPasswordActions.RegisterUser) {
-        // console.log(ctx);
+    async registerUser(ctx: StateContext<any>, { registerForm }: EmailPasswordActions.RegisterUser) {
         console.log(registerForm);
     }
     @Action(EmailPasswordActions.ForgotPassword)
-    async forgotPassword(ctx: StateContext<IAuth0StateModel>, { email }: EmailPasswordActions.ForgotPassword) {
+    async forgotPassword(ctx: StateContext<any>, { email }: EmailPasswordActions.ForgotPassword) {
         console.log(email);
     }
 }

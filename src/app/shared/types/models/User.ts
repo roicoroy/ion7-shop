@@ -16,6 +16,25 @@ https://github.com/swagger-api/swagger-codegen/wiki/Mustache-Template-Variables
 import { BaseModel } from './BaseModel';
 import { Role } from './Role';
 
+
+
+export interface IStrapiUser {
+  jwt: string,
+  user: {
+    id: string,
+    username: string,
+    email: string,
+    provider: string,
+    confirmed: boolean,
+    blocked: boolean,
+    first_name: string,
+    last_name: string,
+    device_token: string,
+    accepted_fcm: string,
+    createdAt: Date,
+    updatedAt: Date,
+  }
+}
 /**
  * Generated Model Interface for Model "User"
  *

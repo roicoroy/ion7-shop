@@ -26,7 +26,7 @@ export class AuthStateService {
         return this.httpClient.delete(environment.MEDUSA_API_BASE_PATH + '/store/auth/', { headers: this.headers });
     }
     retrieveMedusaCustomer() {
-        return this.httpClient.get(environment.MEDUSA_API_BASE_PATH + '/store/auth/');
+        return this.httpClient.get(environment.MEDUSA_API_BASE_PATH + '/store/auth/', { headers: this.headers });
     }
     public loadUser(userId: string): Observable<any> {
         return this.httpClient.get(environment.BASE_PATH + '/api/users/' + userId + '?populate=*', { headers: this.headers })

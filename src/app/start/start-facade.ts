@@ -4,7 +4,6 @@ import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthState } from '../store/auth/auth.state';
 import { AuthStateActions } from '../store/auth/auth.actions';
-import { UserProfileActions } from '../store/user-profile/user-profile.actions';
 
 @Injectable({
     providedIn: 'root'
@@ -12,10 +11,10 @@ import { UserProfileActions } from '../store/user-profile/user-profile.actions';
 export class StartFacade {
 
     @Select(AuthState.isLoggedIn) isLoggedIn$: Observable<boolean>;
-    @Select(AuthState.userEmail) userEmail$: Observable<string>;
-    @Select(AuthState.medusaId) medusaId$: Observable<string>;
     @Select(AuthState.getUser) user$: Observable<string>;
-    @Select(AuthState.hasSession) hasSession$: Observable<string>;
+    @Select(AuthState.getCustomer) customer$: Observable<string>;
+    @Select(AuthState.userEmail) userEmail$: Observable<string>;
+    
 
     readonly viewState$: Observable<any>;
     private store = inject(Store);
@@ -25,24 +24,22 @@ export class StartFacade {
         this.viewState$ = combineLatest(
             [
                 this.isLoggedIn$,
-                this.userEmail$,
-                this.medusaId$,
                 this.user$,
-                this.hasSession$,
+                this.customer$,
+                this.userEmail$,
             ]
         ).pipe(
             map(([
                 isLoggedIn,
-                userEmail,
-                medusaId,
                 user,
-                hasSession,
+                customer,
+                userEmail,
+                
             ]) => ({
                 isLoggedIn,
-                userEmail,
-                medusaId,
+                customer,
                 user,
-                hasSession,
+                userEmail,
             }))
         );
     }
@@ -52,13 +49,13 @@ export class StartFacade {
     loadApp() {
         this.store.dispatch(new AuthStateActions.LoadApp());
     }
-    appUploadProfileImage(formData: FormData) {
-        return this.store.dispatch(new UserProfileActions.UploadImage(formData))
-    }
-    setDarkMode(isDarkMode: boolean) {
-        return this.store.dispatch(new UserProfileActions.UpdateDarkMode(isDarkMode))
-    }
-    setFCMStatus(pushAccepted: boolean) {
-        return this.store.dispatch(new UserProfileActions.UpdateFcmAccepted(pushAccepted))
-    }
+    // appUploadProfileImage(formData: FormData) {
+    //     return this.store.dispatch(new UserProfileActions.UploadImage(formData))
+    // }
+    // setDarkMode(isDarkMode: boolean) {
+    //     return this.store.dispatch(new UserProfileActions.UpdateDarkMode(isDarkMode))
+    // }
+    // setFCMStatus(pushAccepted: boolean) {
+    //     return this.store.dispatch(new UserProfileActions.UpdateFcmAccepted(pushAccepted))
+    // }
 }

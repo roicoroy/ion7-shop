@@ -121,18 +121,18 @@ export class UserPage {
   }
   onFCMChange($event: any) {
     this.pushAccepted = $event.detail.checked;
-    this.facade.setFCMStatus(this.pushAccepted);
+    // this.facade.setFCMStatus(this.pushAccepted);
   }
 
   onDarkModeChange($event: any) {
     this.isDarkMode = $event.detail.checked;
-    this.facade.setDarkMode(this.isDarkMode);
+    // this.facade.setDarkMode(this.isDarkMode);
   }
   updateUser() {
     console.log(this.userForm.value);
   }
   uploadProfilePicture(formData: FormData) {
-    this.facade.appUploadProfileImage(formData);
+    // this.facade.appUploadProfileImage(formData);
   }
   async onImagePicked(file: any) {
     const response = await fetch(file);

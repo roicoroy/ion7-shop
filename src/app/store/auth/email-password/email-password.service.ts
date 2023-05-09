@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { IReqAuthRegister } from "src/app/shared/types/requests/ReqAuthRegister";
 import { environment } from "src/environments/environment";
 
@@ -9,10 +9,8 @@ import { environment } from "src/environments/environment";
 export class EmailPasswordService {
 
     headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    constructor(
-        private httpClient: HttpClient,
-    ) { }
+    
+    private http = inject(HttpClient);
 
     loginEmailPassword(email: string, password?: string) {
         const strapiRequest = {
@@ -20,7 +18,7 @@ export class EmailPasswordService {
             password,
         };
         // console.log(strapiRequest);
-        return this.httpClient.post(environment.BASE_PATH + '/api/auth/local', strapiRequest, { headers: this.headers });
+        return this.http.post(environment.BASE_PATH + '/api/auth/local', strapiRequest);
     }
     registerEmailPassword(email: string, password?: string) {
         const strapiRequest: IReqAuthRegister = {
@@ -29,6 +27,6 @@ export class EmailPasswordService {
             password,
         };
         // console.log(strapiRequest);
-        return this.httpClient.post(environment.BASE_PATH + '/api/auth/local/', strapiRequest, { headers: this.headers });
+        return this.http.post(environment.BASE_PATH + '/api/auth/local/', strapiRequest, { headers: this.headers });
     }
 }

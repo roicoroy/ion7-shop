@@ -44,7 +44,7 @@ export class OrdersPage implements OnInit {
     // })
   }
   ngOnInit() {
-    this.store.dispatch(new AuthStateActions.getMedusaSession());
+    this.store.dispatch(new AuthStateActions.GetSession());
 
     this.presentingElement = document.querySelector('#main-content');
   }

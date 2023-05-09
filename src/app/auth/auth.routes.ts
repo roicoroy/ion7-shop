@@ -9,10 +9,6 @@ export const routes: Routes = [
         loadComponent: () => import('./auth-home/auth-home.page').then(m => m.AuthHomePage)
       },
       {
-        path: 'strapi-auth0',
-        loadComponent: () => import('./auth0/auth0.page').then(m => m.Auth0Page)
-      },
-      {
         path: 'email',
         loadChildren: () => import('./email-flow/email-password.routes').then(m => m.routes)
       },

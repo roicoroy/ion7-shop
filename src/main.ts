@@ -5,7 +5,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { routes } from './app/app.routes';
-import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -20,25 +19,13 @@ import { NgxsModule } from '@ngxs/store';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import localeEn from '@angular/common/locales/en';
-import { AuthState } from './app/store/auth/auth.state';
-import { Auth0State } from './app/store/auth/auth0/auth0.state';
-import { CustomerState } from './app/store/customer/customer.state';
-import { EmailPasswordState } from './app/store/auth/email-password/email-password.state';
-import { ErrorLoggingState } from './app/store/error-logging/error-logging.state';
-import { KeyboardState } from './app/store/keyboard/keyboard.state';
-import { AddressesState } from './app/store/addresses/addresses.state';
-import { CustomerRegisterState } from './app/store/customer-register/customer-register.state';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
-import { UserProfileState } from './app/store/user-profile/user-profile.state';
-import { StrapiMedusaInterceptor } from './app/shared/interceptor/strapi-medusa.interceptor';
-import { IonicStorageModule } from '@ionic/storage-angular';
-import { ThemeState } from './app/store/theme/theme.state';
-import { CartState } from './app/store/cart/cart.state';
-import { ShippingState } from './app/store/shipping/shipping.state';
-import { ProductState } from './app/store/products/products.state';
-import { LanguageState } from './app/store/language/language.state';
 import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
-import { ErrorCatchingInterceptor } from './app/shared/interceptor/error.interceptor';
+import { AppComponent } from './app/app.component';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { StrapiMedusaInterceptor } from './app/shared/interceptor/strapi-medusa.interceptor';
+import { AuthState } from './app/store/auth/auth.state';
+import { EmailPasswordState } from './app/store/auth/email-password/email-password.state';
 
 registerLocaleData(localeEn, 'en');
 registerLocaleData(localePt, 'pt');
@@ -63,15 +50,9 @@ bootstrapApplication(AppComponent, {
       useClass: StrapiMedusaInterceptor,
       multi: true
     },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorCatchingInterceptor,
-      multi: true
-    },
     importProvidersFrom(
       IonicModule.forRoot({}),
       HttpClientModule,
-      IonicStorageModule.forRoot(),
       NgxStripeModule.forRoot(environment.STRIPE_KEY),
       BrowserAnimationsModule,
       TranslateModule.forRoot({
@@ -83,20 +64,8 @@ bootstrapApplication(AppComponent, {
         defaultLanguage: 'en'
       }),
       NgxsModule.forRoot([
-        Auth0State,
-        ErrorLoggingState,
         EmailPasswordState,
-        AuthState,
-        CustomerState,
-        KeyboardState,
-        AddressesState,
-        CustomerRegisterState,
-        UserProfileState,
-        ThemeState,
-        ShippingState,
-        ProductState,
-        LanguageState,
-        CartState
+        AuthState
       ]),
       NgxsResetPluginModule.forRoot(),
       NgxsFormPluginModule.forRoot(),
@@ -105,13 +74,7 @@ bootstrapApplication(AppComponent, {
       NgxsStoragePluginModule.forRoot({
         key: [
           'authState',
-          'addresses',
-          'userProfile',
-          'theme',
-          'language',
-          'customer',
-          "cart",
-          'shipping'
+          'emailPassword'
         ]
       }),
     ),

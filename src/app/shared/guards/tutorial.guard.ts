@@ -6,7 +6,6 @@ import {
   Router
 } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { IStates } from 'src/app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +20,7 @@ export class TutorialGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Promise<boolean> {
 
-    const isComplete = this.store.selectSnapshot<any>((state: IStates) => state.tutorial.isTutorialComplete);
+    const isComplete = this.store.selectSnapshot<any>((state: any) => state.tutorial.isTutorialComplete);
     console.log(isComplete);
     if (!isComplete) {
       this.router.navigateByUrl('/tutorial');

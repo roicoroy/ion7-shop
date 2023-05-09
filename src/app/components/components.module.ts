@@ -12,7 +12,7 @@ import { ShellModule } from './shell/shell.module';
 import { NgxsModule } from '@ngxs/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-import { CartMenuComponent } from './components/app-menu/cart-menu.component';
+import { CartMenuComponent } from './components/cart-menu/cart-menu.component';
 import { MedusaCartComponent } from './components/medusa-cart/medusa-cart.component';
 import { ContactCardPage } from './components/contact-card/contact-card.page';
 import { SettingsComponent } from './components/settings/settings.component';

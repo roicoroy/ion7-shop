@@ -20,19 +20,22 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
     private storage = inject(StorageService);
 
     intercept(request: HttpRequest<any>, next: HttpHandler): any {
-        if (request.url.indexOf(environment.MEDUSA_API_BASE_PATH) === 0 || request.url.indexOf(environment.MEDUSA_API_BASE_PATH) === 0) {
+        if (request.url.indexOf(environment.MEDUSA_API_BASE_PATH) === 0) {
             const clonedReq = this.medusaRequest(request);
             return next.handle(clonedReq) || null;
-        } else {
+        } 
+        if(request.url.indexOf(environment.API_BASE_PATH) === 0){
             return this.storage.getKeyAsObservable('token')
-                .pipe(
-                    take(1),
-                    mergeMap(token => {
-                        const clonedReq = this.addToken(request, token);
-                        return next.handle(clonedReq) || null;
-                    }),
-                    catchError((response: HttpErrorResponse) => throwError(() => new HttpErrorResponse(response)))
-                );
+            .pipe(
+                take(1),
+                mergeMap(res => {
+                    const token = res.value;
+                    console.log(token);
+                    const clonedReq = this.addToken(request, token);
+                    return next.handle(clonedReq) || null;
+                }),
+                catchError((response: HttpErrorResponse) => throwError(() => new HttpErrorResponse(response)))
+            );
         }
     }
     private addToken(request: HttpRequest<any>, token: any) {
@@ -50,6 +53,7 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
         return request;
     }
     private medusaRequest(request: HttpRequest<any>) {
+        console.log('medusa interceptor');
         return request;
     }
 }
