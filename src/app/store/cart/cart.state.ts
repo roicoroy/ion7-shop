@@ -1,13 +1,12 @@
-import { Inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import Medusa from "@medusajs/medusa-js";
 import { State, Store, Selector, Action, StateContext } from "@ngxs/store";
 import { environment } from "src/environments/environment";
 import { AddressesActions } from "../addresses/addresses.actions";
 import { CartActions } from "./cart.actions";
-import { ICustomerLoginData, ICustomerRegisterData, IRegisterAddress } from "src/app/shared/types/types.interfaces";
+import { IRegisterAddress } from "src/app/shared/types/types.interfaces";
 import { ErrorLoggingActions } from "../error-logging/error-logging.actions";
 import { AuthStateActions } from "../auth/auth.actions";
-import { Observable, from, takeUntil, catchError } from "rxjs";
 
 export interface CartStateModel {
     recentCompletedOrder: any;

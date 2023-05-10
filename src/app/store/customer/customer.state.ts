@@ -46,7 +46,7 @@ export class CustomerState {
                     metadata: {}
                 }
             });
-            this.store.dispatch(new AuthStateActions.getMedusaSession());
+            this.store.dispatch(new AuthStateActions.GetSession());
         }
         catch (err: any) {
             if (err) {
@@ -67,7 +67,7 @@ export class CustomerState {
                 postal_code: payload?.postal_code,
                 phone: payload?.phone,
             });
-            this.store.dispatch(new AuthStateActions.getMedusaSession());
+            this.store.dispatch(new AuthStateActions.GetSession());
         }
         catch (err: any) {
             if (err) {
@@ -79,7 +79,7 @@ export class CustomerState {
     async deleteCustomerAddress(ctx: StateContext<CustomerStateModel>, { addressId }: CustomerActions.DeleteCustomerAddress) {
         try {
             let customer = await this.medusa.customers.addresses.deleteAddress(addressId);
-            this.store.dispatch(new AuthStateActions.getMedusaSession());
+            this.store.dispatch(new AuthStateActions.GetSession());
         }
         catch (err: any) {
             if (err) {

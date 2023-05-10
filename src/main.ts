@@ -26,6 +26,17 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { StrapiMedusaInterceptor } from './app/shared/interceptor/strapi-medusa.interceptor';
 import { AuthState } from './app/store/auth/auth.state';
 import { EmailPasswordState } from './app/store/auth/email-password/email-password.state';
+import { AddressesState } from './app/store/addresses/addresses.state';
+import { CartState } from './app/store/cart/cart.state';
+import { CustomerRegisterState } from './app/store/customer-register/customer-register.state';
+import { CustomerState } from './app/store/customer/customer.state';
+import { ErrorLoggingState } from './app/store/error-logging/error-logging.state';
+import { KeyboardState } from './app/store/keyboard/keyboard.state';
+import { LanguageState } from './app/store/language/language.state';
+import { ProductState } from './app/store/products/products.state';
+import { ShippingState } from './app/store/shipping/shipping.state';
+import { ThemeState } from './app/store/theme/theme.state';
+import { UserProfileState } from './app/store/user-profile/user-profile.state';
 
 registerLocaleData(localeEn, 'en');
 registerLocaleData(localePt, 'pt');
@@ -65,7 +76,19 @@ bootstrapApplication(AppComponent, {
       }),
       NgxsModule.forRoot([
         EmailPasswordState,
-        AuthState
+        AuthState,
+
+        ErrorLoggingState,
+        CustomerState,
+        KeyboardState,
+        AddressesState,
+        CustomerRegisterState,
+        UserProfileState,
+        ThemeState,
+        ShippingState,
+        ProductState,
+        LanguageState,
+        CartState
       ]),
       NgxsResetPluginModule.forRoot(),
       NgxsFormPluginModule.forRoot(),

@@ -4,6 +4,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthState } from '../store/auth/auth.state';
 import { AuthStateActions } from '../store/auth/auth.actions';
+import { UserProfileActions } from '../store/user-profile/user-profile.actions';
 
 @Injectable({
     providedIn: 'root'
@@ -49,13 +50,13 @@ export class StartFacade {
     loadApp() {
         this.store.dispatch(new AuthStateActions.LoadApp());
     }
-    // appUploadProfileImage(formData: FormData) {
-    //     return this.store.dispatch(new UserProfileActions.UploadImage(formData))
-    // }
-    // setDarkMode(isDarkMode: boolean) {
-    //     return this.store.dispatch(new UserProfileActions.UpdateDarkMode(isDarkMode))
-    // }
-    // setFCMStatus(pushAccepted: boolean) {
-    //     return this.store.dispatch(new UserProfileActions.UpdateFcmAccepted(pushAccepted))
-    // }
+    appUploadProfileImage(formData: FormData) {
+        return this.store.dispatch(new UserProfileActions.UploadImage(formData))
+    }
+    setDarkMode(isDarkMode: boolean) {
+        return this.store.dispatch(new UserProfileActions.UpdateDarkMode(isDarkMode))
+    }
+    setFCMStatus(pushAccepted: boolean) {
+        return this.store.dispatch(new UserProfileActions.UpdateFcmAccepted(pushAccepted))
+    }
 }

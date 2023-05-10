@@ -36,7 +36,7 @@ export class AuthState implements OnDestroy {
     subscription = new Subject();
     medusa: any;
     headers = new HttpHeaders().set('Content-Type', 'application/json');
-    
+
     constructor() {
         this.medusa = new Medusa({ baseUrl: environment.MEDUSA_API_BASE_PATH, maxRetries: 10 });
     }
@@ -62,16 +62,16 @@ export class AuthState implements OnDestroy {
         const state = ctx.getState();
         if (!state.customer) {
             this.store.dispatch(new AuthStateActions.GetSession());
-            console.log('get session');
+            // console.log('get session');
         }
         if (!state.user && !state.customer) {
             this.store.dispatch(new AuthStateActions.AuthStateLogout());
-            console.log('auth logout');
+            // console.log('auth logout');
         }
     }
     @Action(AuthStateActions.SetAuthState)
     async setAuthState(ctx: StateContext<IAuthStateModel>, { user }: AuthStateActions.SetAuthState) {
-        console.log(user);
+        // console.log(user);
         const state = ctx.getState();
         if (user.jwt && user.user) {
             this.tokenService.setToken(user.jwt);
@@ -89,7 +89,7 @@ export class AuthState implements OnDestroy {
                 .subscribe((user) => {
                     const newUser = user[0];
                     const userEmail = user[0].email;
-                    console.log(newUser);
+                    // console.log(newUser);
                     return ctx.patchState({
                         ...state,
                         isLoggedIn: true,
@@ -103,8 +103,8 @@ export class AuthState implements OnDestroy {
     async getSession(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
 
-        const session$ = from(this.medusa.auth?.getSession())
-        const customer$ = from(this.medusa.customers?.retrieve());
+        const session$ = from(this.medusa.auth.getSession())
+        const customer$ = from(this.medusa.customers.retrieve());
 
         session$.pipe(
             takeUntil(this.subscription),
@@ -113,14 +113,13 @@ export class AuthState implements OnDestroy {
                 return error;
             }),
             combineLatestWith(customer$),
-            map((res: any) => {
-                console.log(res[0].customer);
-                return ctx.patchState({
-                    ...state,
-                    customer: res[0].customer,
-                });
-            })
-        );
+        ).subscribe((cusomers: any) => {
+            // console.log(cusomers[0].customer);
+            return ctx.patchState({
+                ...state,
+                customer: cusomers[0].customer,
+            });
+        });
     }
     @Action(AuthStateActions.LoadStrapiUser)
     loadStrapiUser(ctx: StateContext<IAuthStateModel>, { userId }: AuthStateActions.LoadStrapiUser) {
@@ -130,7 +129,7 @@ export class AuthState implements OnDestroy {
                 takeUntil(this.subscription),
             )
             .subscribe((user: IUser) => {
-                console.log(user);
+                // console.log(user);
                 return ctx.patchState({
                     ...state,
                     isLoggedIn: true,
