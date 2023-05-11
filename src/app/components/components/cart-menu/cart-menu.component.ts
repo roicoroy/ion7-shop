@@ -24,9 +24,9 @@ export class CartMenuComponent {
     private facade: AppMenuFacade,
   ) {
     this.viewState$ = this.facade.viewState$;
-    this.viewState$.subscribe((vs)=>{
-      console.log(vs.cart?.items);
-    })
+    // this.viewState$.subscribe((vs)=>{
+    //   console.log(vs.cart?.items);
+    // });
 
   }
   closeCartMenu(menuId: any) {

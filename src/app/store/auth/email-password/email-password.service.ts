@@ -9,7 +9,7 @@ import { environment } from "src/environments/environment";
 export class EmailPasswordService {
 
     headers = new HttpHeaders().set('Content-Type', 'application/json');
-    
+
     private http = inject(HttpClient);
 
     loginEmailPassword(email: string, password?: string) {
@@ -17,8 +17,8 @@ export class EmailPasswordService {
             identifier: email,
             password,
         };
-        // console.log(strapiRequest);
-        return this.http.post(environment.BASE_PATH + '/api/auth/local', strapiRequest);
+        console.log(strapiRequest);
+        return this.http.post(environment.BASE_PATH + '/api/auth/local', strapiRequest, { headers: this.headers });
     }
     registerEmailPassword(email: string, password?: string) {
         const strapiRequest: IReqAuthRegister = {

@@ -18,6 +18,13 @@ export namespace AuthStateActions {
         static readonly type = '[AuthStateActions] Load Strapi User';
         constructor(public userId: string) { }
     }
+    // export class GetToken {
+    //     static readonly type = '[AuthStateActions] Get Token';
+    // }
+    export class SetToken {
+        static readonly type = '[AuthStateActions] Set Token';
+        constructor(public token: string) { }
+    }
     export class SetLoggedIn {
         static readonly type = '[AuthStateActions] Set Logged In';
         constructor(public isLoggedIn: boolean) { }

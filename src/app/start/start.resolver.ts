@@ -13,6 +13,7 @@ export class StartResolver implements Resolve<Observable<any>> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<any> {
-        return this.store.dispatch(new AuthStateActions.LoadApp());
+        // return this.store.dispatch(new AuthStateActions.LoadApp());
+        return null;
     }
 }

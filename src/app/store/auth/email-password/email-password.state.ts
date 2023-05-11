@@ -6,6 +6,7 @@ import { EmailPasswordService } from './email-password.service';
 import { UtilityService } from 'src/app/shared/services/utility/utility.service';
 import { IUser } from 'src/app/shared/types/models/User';
 import { AuthStateActions } from '../auth.actions';
+import { TokenService } from 'src/app/shared/services/token/token.service';
 
 export class IEmailPasswordStateModel { }
 
@@ -18,18 +19,29 @@ export class EmailPasswordState {
     private emailPasswordService = inject(EmailPasswordService);
     private store = inject(Store);
     private utility = inject(UtilityService);
+    private tokenService = inject(TokenService);
 
     @Action(EmailPasswordActions.LoginEmailPassword)
-    async loginEmailPassword(ctx: StateContext<any>, { email, password }: EmailPasswordActions.LoginEmailPassword) {
+    loginEmailPassword(ctx: StateContext<any>, { email, password }: EmailPasswordActions.LoginEmailPassword): any {
         return this.emailPasswordService.loginEmailPassword(email, password)
-            .pipe(
-                switchMap((user: any) => {
-                    return this.store.dispatch(new AuthStateActions.SetAuthState(user));
-                }),
-                catchError(err => {
-                    return throwError(() => new Error(JSON.stringify(err)));
-                }),
-            )
+            // .pipe(
+            //     switchMap((user: any) => {
+            //         console.log(user);
+            //         return null;
+            //         // return this.store.dispatch(new AuthStateActions.SetAuthState(user));
+            //     }),
+            //     catchError(err => {
+            //         return throwError(() => new Error(JSON.stringify(err)));
+            //     }),
+            // )
+            .subscribe((user: any) => {
+                console.log(user);
+                // if (user.jwt && user.user) {
+                //     // this.store.dispatch(new AuthStateActions.SetToken(user.jwt));
+                //     // this.tokenService.setToken(user.jwt);
+                //     this.store.dispatch(new AuthStateActions.SetAuthState(user));
+                // }
+            });
     }
     @Action(EmailPasswordActions.RegisterUser)
     async registerUser(ctx: StateContext<any>, { registerForm }: EmailPasswordActions.RegisterUser) {

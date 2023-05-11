@@ -37,6 +37,7 @@ import { ProductState } from './app/store/products/products.state';
 import { ShippingState } from './app/store/shipping/shipping.state';
 import { ThemeState } from './app/store/theme/theme.state';
 import { UserProfileState } from './app/store/user-profile/user-profile.state';
+import "@angular/compiler";
 
 registerLocaleData(localeEn, 'en');
 registerLocaleData(localePt, 'pt');
@@ -56,11 +57,11 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: LOCALE_ID, useValue: 'en' },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: StrapiMedusaInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: StrapiMedusaInterceptor,
+    //   multi: true
+    // },
     importProvidersFrom(
       IonicModule.forRoot({}),
       HttpClientModule,
@@ -100,6 +101,7 @@ bootstrapApplication(AppComponent, {
           'emailPassword'
         ]
       }),
+      IonicStorageModule.forRoot()
     ),
     provideRouter(routes),
   ],
