@@ -35,13 +35,10 @@ export class HomePage implements OnDestroy {
 
   constructor() {
     this.viewState$ = this.facade.viewState$;
-    this.viewState$
-      .pipe(
-        take(1),
-      )
-      .subscribe((vs) => {
-        console.log(vs);
-      });
+    // this.viewState$
+    //   .subscribe((vs) => {
+    //     console.log(vs);
+    //   });
   }
   refresh(ev: any) {
     this.facade.loadApp();

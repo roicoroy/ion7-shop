@@ -5,7 +5,7 @@ import { IonicModule, ModalController } from "@ionic/angular";
 import { TranslateModule } from "@ngx-translate/core";
 import { NgxsFormPluginModule } from "@ngxs/form-plugin";
 import { NgxsStoragePluginModule } from "@ngxs/storage-plugin";
-import { NgxsModule } from "@ngxs/store";
+import { NgxsModule, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { CustomComponentsModule } from "src/app/components/components.module";
 import { scaleHeight } from "src/app/shared/animations/animations";
@@ -15,6 +15,7 @@ import { StartFacade } from "../../start-facade";
 import { ChangePasswordModalComponent } from "./change-password-modal/change-password-modal.component";
 import { ImagePickerComponent } from "./image-picker/image-picker.component";
 import { LanguageComponent } from "../../../components/components/language-component/language.component";
+import { UserProfileActions } from "src/app/store/user-profile/user-profile.actions";
 
 @Component({
   selector: 'app-user',
@@ -80,6 +81,7 @@ export class UserPage {
   private facade = inject(StartFacade);
   private formBuilder = inject(FormBuilder);
   private modalCtrl = inject(ModalController);
+  private store = inject(Store);
 
   constructor() {
     this.viewState$ = this.facade.viewState$;
@@ -129,6 +131,7 @@ export class UserPage {
   }
   updateUser() {
     console.log(this.userForm.value);
+    this.store.dispatch(new UserProfileActions.UpdateStrapiUser(this.userForm.value));
   }
   uploadProfilePicture(formData: FormData) {
     this.facade.appUploadProfileImage(formData);

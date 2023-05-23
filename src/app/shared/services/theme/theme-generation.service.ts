@@ -3,7 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import * as Color from 'color';
 import { Store } from '@ngxs/store';
 import { Subject, takeUntil } from 'rxjs';
-import { StrapiService } from '../strapi/strapi.service';
+import { StrapiService } from '../api/strapi.service';
 
 const defaults = {
     primary: '#3880ff',

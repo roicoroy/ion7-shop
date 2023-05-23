@@ -57,11 +57,11 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: LOCALE_ID, useValue: 'en' },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: StrapiMedusaInterceptor,
-    //   multi: true
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: StrapiMedusaInterceptor,
+      multi: true
+    },
     importProvidersFrom(
       IonicModule.forRoot({}),
       HttpClientModule,

@@ -53,7 +53,8 @@ export class StrapiService {
             identifier: email,
             password
         }
-        return this.httpClient.post(environment.BASE_PATH + '/api/auth/local', data, { headers: this.headers });
+        this.httpClient.post<any>(environment.BASE_PATH + '/api/auth/local', data, { headers: this.headers });
+        // return this.httpClient.post(environment.BASE_PATH + '/api/auth/local', data, { headers: this.headers });
     }
 
     uploadData(formData: FormData) {
