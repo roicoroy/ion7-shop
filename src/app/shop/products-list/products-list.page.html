@@ -1,0 +1,79 @@
+<!-- <app-header></app-header> -->
+
+<ion-header [translucent]="true">
+  <ion-toolbar *ngIf="viewState$ | async as vs">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons *ngIf="vs.user === null" slot="end">
+      <ion-button expand="block" fill="clear" shape="round">
+        Login
+      </ion-button>
+    </ion-buttons>
+    <ion-avatar slot="end" *ngIf="vs.user">
+      <img [src]="vs.user?.avatar.url" />
+    </ion-avatar>
+    <ion-title> Products List </ion-title>
+    <ion-buttons slot="end">
+      <cart-menu></cart-menu>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large"> Products List </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="fashion-listing-content">
+    <ng-container *ngIf="viewState$ | async as vs">
+      <ion-row class="items-row">
+        <ion-col size="6" class="listing-item" *ngFor="let product of vs.productList">
+          <div class="item-image-wrapper">
+            <a class="image-anchor" (click)="navigateDetails(product)">
+              <app-aspect-ratio [ratio]="{w: 3, h: 4}">
+                <app-image-shell class="item-image" animation="spinner" [src]="product.thumbnail"
+                  [alt]="'product image'">
+                </app-image-shell>
+              </app-aspect-ratio>
+            </a>
+          </div>
+          <ion-row class="item-body">
+            <ion-col size="12" class="main-info">
+              <h4 class="item-name">
+                <app-text-shell animation="gradient" [data]="product.title"></app-text-shell>
+              </h4>
+            </ion-col>
+          </ion-row>
+          <ion-accordion-group>
+            <ion-accordion>
+              <ion-item class="ion-padding-top ion-padding-bottom ion-margin-left ion-margin-right" slot="header"
+                color="primary">
+                <ion-label>Price list</ion-label>
+              </ion-item>
+              <div (click)="selectVariant(variant)" class="price-list-content ion-margin-bottom ion-text-center"
+                slot="content" *ngFor="let variant of product?.variants">
+                <ion-label>{{ variant?.title }}</ion-label>
+
+                <ion-row class="ion-text-center" *ngFor="let price of variant.prices">
+                  <ion-col>
+                    <div class="amount">{{ price.amount }}</div>
+                  </ion-col>
+                  <ion-col>
+                    <div class="currency-code">{{ price.currency_code }}</div>
+                  </ion-col>
+                </ion-row>
+                <!-- <ion-note *ngFor="let price of variant.prices">
+                  <div class="amount">{{ price.amount }}</div>
+                  <div class="currency-code">{{ price.currency_code }}</div>
+                </ion-note> -->
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+  </ion-content>
+</ion-content>
