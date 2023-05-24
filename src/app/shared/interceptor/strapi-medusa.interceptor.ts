@@ -22,11 +22,10 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
             return next.handle(clonedReq) || null;
         }
         if (request.url.indexOf(environment.API_BASE_PATH) === 0) {
+
             return this.storage.getKeyAsObservable('token')
                 .pipe(
-                    mergeMap(res => {
-                        console.log(res);
-                        const token = res;
+                    mergeMap((token) => {
                         console.log(token);
                         const clonedReq = this.addToken(request, token);
                         return next.handle(clonedReq) || null;
@@ -39,8 +38,8 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
         if (token) {
             const clone: HttpRequest<any> = request.clone({
                 setHeaders: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             return clone;
         }
@@ -52,11 +51,12 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
         // console.log(win.get());
 
         // return request;
-        // const clone: HttpRequest<any> = request.clone({
-        //     setHeaders: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // });
-        return request;
+        const clone: HttpRequest<any> = request.clone({
+            setHeaders: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials:true
+        });
+        return clone;
     }
 }

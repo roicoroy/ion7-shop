@@ -55,7 +55,7 @@ export class EmailPasswordPage implements OnDestroy {
     this.viewState$ = this.facade.viewState$;
     this.viewState$
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(async(vs) => {
+      .subscribe(async (vs) => {
         if (vs.isLoggedIn) {
           await this.utility.presentLoading('...');
           setTimeout(async () => {
@@ -67,11 +67,11 @@ export class EmailPasswordPage implements OnDestroy {
   }
 
   ionViewDidEnter() {
-    this.form?.loginForm.get('email').setValue("test@test.com");
+    this.form?.loginForm.get('email').setValue("roicoroy@yahoo.com.br");
     this.form?.loginForm.get('password').setValue("Rwbento123!");
   }
 
-  async login(): Promise<void> {
+  login() {
     this.store.dispatch(new EmailPasswordActions.LoginEmailPassword(this.form?.loginForm.get('email').value, this.form?.loginForm.get('password').value));
   }
   forgotPassowordPage(): void {

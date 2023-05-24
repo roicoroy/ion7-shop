@@ -9,12 +9,12 @@ import { environment } from "src/environments/environment";
 export class EmailPasswordService {
 
     headers = new HttpHeaders().set('Content-Type', 'application/json');
-    httpOptions = {
-        headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-        }),
-        withCredentials: true,
-    };
+    // httpOptions = {
+    //     headers: new HttpHeaders({
+    //         'Content-Type': 'application/json',
+    //     }),
+    //     withCredentials: true,
+    // };
     private http = inject(HttpClient);
 
     loginEmailPassword(email: string, password?: string) {
@@ -23,7 +23,7 @@ export class EmailPasswordService {
             password,
         };
         // console.log(strapiRequest);
-        return this.http.post('http://localhost:1337/api/auth/local', strapiRequest, { headers: this.headers });
+        return this.http.post(`${environment.BASE_PATH}/api/auth/local`, strapiRequest, { headers: this.headers });
     }
     registerEmailPassword(email: string, password?: string) {
         const strapiRequest: IReqAuthRegister = {
@@ -32,6 +32,6 @@ export class EmailPasswordService {
             password,
         };
         // console.log(strapiRequest);
-        return this.http.post(environment.BASE_PATH + '/api/auth/local/', strapiRequest, { headers: this.headers });
+        return this.http.post(`${environment.BASE_PATH}/api/auth/local`, strapiRequest, { headers: this.headers });
     }
 }

@@ -1,11 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
-import Medusa from "@medusajs/medusa-js";
 import { environment } from 'src/environments/environment';
 import { ShippingActions } from './shipping.actions';
-
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { Subject, catchError, takeUntil, throwError } from 'rxjs';
+import { MedusaService } from 'src/app/shared/services/api/medusa.service';
 
 export interface ShippingStateModel {
     shipping_options: any;
@@ -25,16 +23,9 @@ export const initStateModel: ShippingStateModel = {
 })
 @Injectable()
 export class ShippingState {
-    medusaClient: any;
-
-    private http = inject(HttpClient);
     private store = inject(Store);
-    headers = new HttpHeaders().set('Content-Type', 'application/json');
+    private medusaApi = inject(MedusaService);
     subscription = new Subject();
-
-    constructor() {
-        this.medusaClient = new Medusa({ baseUrl: environment.MEDUSA_API_BASE_PATH, maxRetries: 10 });
-    }
 
     @Selector()
     static getShippingOptions(state: ShippingStateModel) {
@@ -51,11 +42,20 @@ export class ShippingState {
 
     @Action(ShippingActions.GetShippingOptions)
     async getShippingOptions(ctx: StateContext<ShippingStateModel>) {
-        // const shipping_options$ = from(this.medusaClient.shippingOptions.listCartOptions(cartId));
-        const cart = this.store.selectSnapshot<any>((state: any) => state.cart?.cart);
-        const shipping_options = await this.medusaClient.shippingOptions.listCartOptions(cart.id);
-        return ctx.patchState({
-            shipping_options: shipping_options?.shipping_options
+        const state = ctx.getState();
+        const cartObj = this.store.selectSnapshot<any>((state: any) => state.cart?.cart);
+        this.medusaApi.shippingOptions(cartObj.id).pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                const error = throwError(() => new Error(JSON.stringify(err)));
+                return error;
+            }),
+        ).subscribe((shipping_options: any) => {
+            console.log(shipping_options);
+            return ctx.patchState({
+                ...state,
+                shipping_options: shipping_options.shipping_options,
+            });
         });
     }
 
@@ -63,20 +63,33 @@ export class ShippingState {
     async addShippingMethod(ctx: StateContext<ShippingStateModel>, { option_id }: ShippingActions.AddShippingMethod) {
         const state = ctx.getState();
         const cartObj = this.store.selectSnapshot<any>((state: any) => state.cart?.cart);
-        console.log(state.payment_sessions);
         if (state.payment_sessions) {
-            const cart = await this.medusaClient.carts.addShippingMethod(cartObj.id, {
-                option_id: option_id
-            });
-            console.log(cart);
-            return ctx.patchState({
-                ...state,
-                payment_sessions: cart.cart?.payment_sessions
+            this.medusaApi.addShippingMethod(cartObj.id, option_id).pipe(
+                takeUntil(this.subscription),
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),
+            ).subscribe((cart: any) => {
+                console.log(cart.cart?.payment_sessions);
+                return ctx.patchState({
+                    ...state,
+                    payment_sessions: cart.cart?.payment_sessions
+                });
             });
         } else {
-            const cart = await this.medusaClient.carts.createPaymentSessions(cartObj.id);
-            return ctx.patchState({
-                payment_sessions: cart.data?.payment_sessions
+            this.medusaApi.createPaymentSessions(cartObj.id).pipe(
+                takeUntil(this.subscription),
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),
+            ).subscribe((cart: any) => {
+                console.log(cart.cart?.payment_sessions);
+                return ctx.patchState({
+                    ...state,
+                    payment_sessions: cart.cart?.payment_sessions
+                });
             });
         }
     }
@@ -85,14 +98,33 @@ export class ShippingState {
     async setPaymentSession(ctx: StateContext<ShippingStateModel>, { provider_id }: ShippingActions.SetPaymentSession) {
         const state = ctx.getState();
         const cartRes = this.store.selectSnapshot<any>((state: any) => state.cart?.cart);
-        const cart = await this.medusaClient.carts.setPaymentSession(cartRes.id, {
-            provider_id: provider_id,
-        });
-        console.log(cart.cart.payment_session.data?.client_secret);
-        ctx.patchState({
-            ...state,
-            provider_id: cart.cart?.provider_id,
-            client_secret: cart.cart.payment_session.data?.client_secret,
+        const data = {
+            provider_id: provider_id
+        }
+        console.log(data);
+        // const cart = await this.medusaClient.carts.setPaymentSession(cartRes.id, {
+        //     provider_id: provider_id,
+        // });
+        // console.log(cart.cart.payment_session.data?.client_secret);
+        // ctx.patchState({
+        //     ...state,
+        //     provider_id: cart.cart?.provider_id,
+        //     client_secret: cart.cart.payment_session.data?.client_secret,
+        // });
+
+        this.medusaApi.setPaymentSession(cartRes.id, provider_id).pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                const error = throwError(() => new Error(JSON.stringify(err)));
+                return error;
+            }),
+        ).subscribe((cart: any) => {
+            console.log(cart.cart?.payment_session?.data?.client_secret);
+            ctx.patchState({
+                ...state,
+                provider_id: cart.cart?.provider_id,
+                client_secret: cart.cart?.payment_session?.data?.client_secret,
+            });
         });
     }
 

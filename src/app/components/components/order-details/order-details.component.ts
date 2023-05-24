@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, inject } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import Medusa from "@medusajs/medusa-js";
-import { from, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { MedusaService } from 'src/app/shared/services/api/medusa.service';
 
 export interface IOrderDetailsComponentsData {
   data: any,
@@ -13,27 +12,22 @@ export interface IOrderDetailsComponentsData {
   templateUrl: './order-details.component.html',
   styleUrls: ['./order-details.component.scss'],
 })
-export class OrderDetailsComponent implements AfterViewInit {
+export class OrderDetailsComponent implements AfterViewInit, OnDestroy {
 
   @Input() orderId: string;
 
-  // @Input() set orderDetailsData(value: IOrderDetailsComponentsData | any) {
-  //   console.log(value);
-  // };
-
-  medusaClient: any;
+  private medusa = inject(MedusaService);
+  private modalCtrl = inject(ModalController);
 
   order$: Observable<any>;
-
-  constructor(
-    private modalCtrl: ModalController,
-  ) {
-    this.medusaClient = new Medusa({ baseUrl: environment.MEDUSA_API_BASE_PATH, maxRetries: 10 });
-  }
+  subscription = new Subject();
 
   async ngAfterViewInit(): Promise<void> {
-    this.order$ = from(this.medusaClient.orders.retrieve(this.orderId));
+    this.order$ = this.medusa.ordersRetrieve(this.orderId);
     this.order$
+      .pipe(
+        takeUntil(this.subscription),
+      )
       .subscribe((order: any) => {
         console.log(order);
       });
@@ -42,5 +36,8 @@ export class OrderDetailsComponent implements AfterViewInit {
   dismissModal() {
     return this.modalCtrl.dismiss('123', 'confirm');
   }
-
+  ngOnDestroy() {
+    this.subscription.next(null);
+    this.subscription.complete();
+  }
 }

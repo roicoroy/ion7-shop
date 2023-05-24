@@ -14,6 +14,7 @@ export class CheckoutResolver implements Resolve<Observable<any>> {
     resolve(): Observable<any> {
         this.store.dispatch(new ShippingActions.GetShippingOptions());
         this.store.dispatch(new AddressesActions.GetRegionList());
-        return this.store.dispatch(new AuthStateActions.LoadApp());
+        // return this.store.dispatch(new AuthStateActions.LoadApp());
+        return null;
     }
 }

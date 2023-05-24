@@ -11,7 +11,7 @@ export interface ICartAddressesFacadeState {
     regionList: any,
     countryList: any,
     cart: any,
-    session: any,
+    // session: any,
 }
 
 @Injectable({
@@ -21,7 +21,7 @@ export class CartAddressesFacade {
 
     @Select(CartState.getCart) cart$: Observable<any>;
 
-    @Select(AuthState.getSession) session$: Observable<any>;
+    // @Select(AuthState.getSession) session$: Observable<any>;
 
     @Select(AuthState.getCustomer) customer$: Observable<any>;
 
@@ -36,7 +36,7 @@ export class CartAddressesFacade {
         this.viewState$ = combineLatest(
             [
                 this.cart$,
-                this.session$,
+                // this.session$,
                 this.customer$,
                 this.regionList$,
                 this.countryList$,
@@ -45,14 +45,14 @@ export class CartAddressesFacade {
             map((
                 [
                     cart,
-                    session,
+                    // session,
                     customer,
                     regionList,
                     countryList,
                 ]
             ) => ({
                 cart,
-                session,
+                // session,
                 customer,
                 regionList,
                 countryList,

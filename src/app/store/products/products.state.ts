@@ -1,9 +1,10 @@
-import { Injectable } from "@angular/core";
-import Medusa from "@medusajs/medusa-js";
+import { Injectable, OnDestroy, inject } from "@angular/core";
 import { State, Store, Selector, Action, StateContext } from "@ngxs/store";
 import { environment } from "src/environments/environment";
 import { ErrorLoggingActions } from "../error-logging/error-logging.actions";
 import { ProductsActions } from "./products.actions";
+import { Subject, catchError, takeUntil, throwError } from "rxjs";
+import { MedusaService } from "src/app/shared/services/api/medusa.service";
 
 export interface ProductStateModel {
     selectedProduct: any;
@@ -21,14 +22,11 @@ export const initStateModel: ProductStateModel = {
     defaults: initStateModel,
 })
 @Injectable()
-export class ProductState {
-    medusaClient: any;
+export class ProductState implements OnDestroy {
+    private medusaApi = inject(MedusaService);
+    private store = inject(Store);
+    subscription = new Subject();
 
-    constructor(
-        private store: Store,
-    ) {
-        this.medusaClient = new Medusa({ baseUrl: environment.MEDUSA_API_BASE_PATH, maxRetries: 10 });
-    }
     @Selector()
     static getProductList(state: ProductStateModel) {
         return state.productsList;
@@ -42,20 +40,21 @@ export class ProductState {
         return state.selectedVariant;
     }
     @Action(ProductsActions.GetProductList)
-    async getProductList({ patchState }: StateContext<ProductStateModel>) {
-        try {
-            let response = await this.medusaClient.products.list();
-            if (response?.products != null && response.response?.status === 200) {
-                patchState({
-                    productsList: response?.products,
-                });
-            }
-        }
-        catch (err: any) {
-            if (err) {
+    async getProductList(ctx: StateContext<ProductStateModel>) {
+        const response$ = this.medusaApi.productsList();
+        response$.pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                console.log('Handling error locally and rethrowing it...', err);
                 this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-            }
-        }
+                return throwError(() => new Error(err));
+            })
+        ).subscribe((response: any) => {
+            console.log(response);
+            ctx.patchState({
+                productsList: response?.products,
+            });
+        });
     }
     @Action(ProductsActions.addSelectedProduct)
     addProductToState(ctx: StateContext<ProductStateModel>, { payload }: ProductsActions.addSelectedProduct) {
@@ -88,5 +87,9 @@ export class ProductState {
             selectedVariant: null,
             productsList: null,
         });
+    }
+    ngOnDestroy() {
+        this.subscription.next(null);
+        this.subscription.complete();
     }
 }

@@ -16,6 +16,7 @@ import { ThemeService } from './shared/services/theme/theme-generation.service';
 import { TokenService } from './shared/services/token/token.service';
 import { AuthStateActions } from './store/auth/auth.actions';
 import { AppFacade, IAppFacadeState } from './app.facade';
+import { ProductsActions } from './store/products/products.actions';
 
 @Component({
   selector: 'app-root',
@@ -84,6 +85,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   checkout() {
     this.menu.toggle('end').then(() => {
+      this.medusaCartComponent.goToCheckout();
+      this.store.dispatch(new ProductsActions.clearSelectedProduct());
     });
   }
   logout(): void {

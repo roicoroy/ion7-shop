@@ -28,7 +28,6 @@ import { AuthState } from './app/store/auth/auth.state';
 import { EmailPasswordState } from './app/store/auth/email-password/email-password.state';
 import { AddressesState } from './app/store/addresses/addresses.state';
 import { CartState } from './app/store/cart/cart.state';
-import { CustomerRegisterState } from './app/store/customer-register/customer-register.state';
 import { CustomerState } from './app/store/customer/customer.state';
 import { ErrorLoggingState } from './app/store/error-logging/error-logging.state';
 import { KeyboardState } from './app/store/keyboard/keyboard.state';
@@ -83,7 +82,6 @@ bootstrapApplication(AppComponent, {
         CustomerState,
         KeyboardState,
         AddressesState,
-        CustomerRegisterState,
         UserProfileState,
         ThemeState,
         ShippingState,
@@ -98,7 +96,13 @@ bootstrapApplication(AppComponent, {
       NgxsStoragePluginModule.forRoot({
         key: [
           'authState',
-          'emailPassword'
+          'addresses',
+          'userProfile',
+          'theme',
+          'language',
+          'customer',
+          'cart',
+          'shipping'
         ]
       }),
       IonicStorageModule.forRoot()

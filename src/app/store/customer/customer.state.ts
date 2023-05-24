@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Action, State, StateContext, Store } from '@ngxs/store';
-import Medusa from "@medusajs/medusa-js";
-import { environment } from 'src/environments/environment';
-import { HttpHeaders } from '@angular/common/http';
 import { CustomerActions } from './customer.actions';
 import { ErrorLoggingActions } from '../error-logging/error-logging.actions';
 import { AuthStateActions } from '../auth/auth.actions';
+import { Subject, catchError, takeUntil, throwError } from 'rxjs';
+import { MedusaService } from 'src/app/shared/services/api/medusa.service';
 
 export class CustomerStateModel {
     customer: any;
@@ -18,73 +17,63 @@ export class CustomerStateModel {
     },
 })
 @Injectable()
-export class CustomerState {
-    medusa: any;
-    constructor(
-        private store: Store,
-    ) {
-        this.medusa = new Medusa({ baseUrl: environment.MEDUSA_API_BASE_PATH, maxRetries: 10 });
-    }
+export class CustomerState implements OnDestroy {
+    private store = inject(Store);
+    private medusaApi = inject(MedusaService);
+
+    private subscription = new Subject();
+
     @Action(CustomerActions.AddAShippingAddress)
     async addaShippingAddress(ctx: StateContext<CustomerStateModel>, { payload }: CustomerActions.AddAShippingAddress) {
         console.log(payload)
-        try {
-            const session = await this.medusa.auth?.getSession();
-            console.log(session);
-            let customer = await this.medusa.customers.addresses.addAddress({
-                address: {
-                    first_name: payload?.first_name,
-                    last_name: payload?.last_name,
-                    address_1: payload?.address_1,
-                    city: payload?.city,
-                    country_code: payload?.country_code,
-                    postal_code: payload?.postal_code,
-                    phone: payload?.phone,
-                    address_2: payload?.address_2,
-                    province: 'Georgia',
-                    company: 'Wyman LLC',
-                    metadata: {}
-                }
-            });
-            this.store.dispatch(new AuthStateActions.GetSession());
-        }
-        catch (err: any) {
-            if (err) {
+        const customer$ = this.medusaApi.addAddress(payload);
+        customer$.pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                console.log('Handling error locally and rethrowing it...', err);
                 this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-            }
-        }
+                return throwError(() => new Error(err));
+            })
+        ).subscribe((response: any) => {
+            // console.log(response);
+            this.store.dispatch(new AuthStateActions.GetSession());
+        });
     }
     @Action(CustomerActions.UpdateCustomerAddress)
     async updateCustomerAddress(ctx: StateContext<CustomerStateModel>, { addressId, payload }: CustomerActions.UpdateCustomerAddress) {
-        try {
-            let customer = await this.medusa.customers.addresses.updateAddress(addressId, {
-                first_name: payload?.first_name,
-                last_name: payload?.last_name,
-                address_1: payload?.address_1,
-                address_2: payload?.address_2,
-                city: payload?.city,
-                country_code: payload?.country_code,
-                postal_code: payload?.postal_code,
-                phone: payload?.phone,
-            });
-            this.store.dispatch(new AuthStateActions.GetSession());
-        }
-        catch (err: any) {
-            if (err) {
+        this.store.dispatch(new AuthStateActions.GetSession());
+
+        const customer$ = this.medusaApi.updateAddress(addressId, payload);
+        customer$.pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                console.log('Handling error locally and rethrowing it...', err);
                 this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-            }
-        }
+                return throwError(() => new Error(err));
+            })
+        ).subscribe((response: any) => {
+            // console.log(response);
+            this.store.dispatch(new AuthStateActions.GetSession());
+        });
     }
     @Action(CustomerActions.DeleteCustomerAddress)
     async deleteCustomerAddress(ctx: StateContext<CustomerStateModel>, { addressId }: CustomerActions.DeleteCustomerAddress) {
-        try {
-            let customer = await this.medusa.customers.addresses.deleteAddress(addressId);
-            this.store.dispatch(new AuthStateActions.GetSession());
-        }
-        catch (err: any) {
-            if (err) {
+        const customer$ = this.medusaApi.deleteAddress(addressId);
+        customer$.pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                console.log('Handling error locally and rethrowing it...', err);
                 this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-            }
-        }
+                return throwError(() => new Error(err));
+            })
+        ).subscribe((response: any) => {
+            // console.log(response);
+            this.store.dispatch(new AuthStateActions.GetSession());
+        });
+        this.store.dispatch(new AuthStateActions.GetSession());
+    }
+    ngOnDestroy() {
+        this.subscription.next(null);
+        this.subscription.complete();
     }
 }

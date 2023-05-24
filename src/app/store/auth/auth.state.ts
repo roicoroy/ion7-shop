@@ -30,16 +30,12 @@ export class IAuthStateModel {
 export class AuthState implements OnDestroy {
 
     private store = inject(Store);
-    
     private authService = inject(AuthStateService);
-    
     private tokenService = inject(TokenService);
-
     private navigation = inject(NavigationService);
-
-    subscription = new Subject();
-
     private medusa = inject(MedusaService);
+    
+    subscription = new Subject();
 
     @Selector()
     static isLoggedIn(state: IAuthStateModel) {
@@ -65,6 +61,7 @@ export class AuthState implements OnDestroy {
     async loadApp(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
         console.log('load app', state);
+        this.store.dispatch(new AuthStateActions.GetSession());
         if (!state.customer) {
             this.store.dispatch(new AuthStateActions.GetSession());
             console.log('get session');
@@ -134,7 +131,7 @@ export class AuthState implements OnDestroy {
     async getSession(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
         this.medusa.getMedusaSession().subscribe((customer: any) => {
-            // console.log('session', customer);
+            console.log('session', customer.customer);
             ctx.patchState({
                 ...state,
                 customer: customer.customer,

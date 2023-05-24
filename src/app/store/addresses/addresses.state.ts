@@ -1,10 +1,9 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
-import Medusa from "@medusajs/medusa-js";
 import { AddressesActions } from '../addresses/addresses.actions';
-import { environment } from 'src/environments/environment';
 import { ErrorLoggingActions } from '../error-logging/error-logging.actions';
-import { Subject, from, takeUntil, catchError, throwError } from 'rxjs';
+import { Subject, takeUntil, catchError, throwError } from 'rxjs';
+import { MedusaService } from 'src/app/shared/services/api/medusa.service';
 
 export interface AddressesStateModel {
     selectedAddress: any;
@@ -25,14 +24,10 @@ export const initAddressStateModel: AddressesStateModel = {
     defaults: initAddressStateModel,
 })
 @Injectable()
-export class AddressesState implements OnDestroy{
-    medusaClient: any;
+export class AddressesState implements OnDestroy {
     subscription = new Subject();
-    constructor(
-        private store: Store,
-    ) {
-        this.medusaClient = new Medusa({ baseUrl: environment.MEDUSA_API_BASE_PATH, maxRetries: 10 });
-    }
+    private medusaApi = inject(MedusaService);
+    private store = inject(Store);
 
     @Selector()
     static getSelectedAddress(state: AddressesStateModel) {
@@ -49,7 +44,9 @@ export class AddressesState implements OnDestroy{
     }
     @Action(AddressesActions.GetRegionList)
     async getMedusaRegionList(ctx: StateContext<AddressesStateModel>) {
-        const regions$ = from(this.medusaClient.regions.list());
+        // const regions$ = from(this.medusaClient.regions.list());
+        const regions$ = this.medusaApi.regionsList();
+
         regions$.pipe(
             takeUntil(this.subscription),
             catchError(err => {
@@ -66,7 +63,8 @@ export class AddressesState implements OnDestroy{
     }
     @Action(AddressesActions.GetCountries)
     async getCountries(ctx: StateContext<AddressesStateModel>, { regionId }: AddressesActions.GetCountries) {
-        const region$ = from(this.medusaClient?.regions?.retrieve(regionId));
+        // const region$ = from(this.medusaClient?.regions?.retrieve(regionId));
+        const region$ = this.medusaApi.regionsRetrieve(regionId);;
         region$.pipe(
             takeUntil(this.subscription),
             catchError(err => {

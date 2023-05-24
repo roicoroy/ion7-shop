@@ -31,13 +31,11 @@ export class UserProfileState implements OnDestroy {
         const state = ctx.getState();
         // console.log(state);
         const userId = this.store.selectSnapshot<any>((state: any) => state.authState?.userId);
-        this.service.updateStrapiUserFcm(userId, action.fcmAccepted, '123')
-            .pipe(
-                takeUntil(this.subscription),
-            )
-            .subscribe((user) => {
-                console.log(user);
-            });
+        this.service.updateStrapiUserFcm(userId, action.fcmAccepted, '123').pipe(
+            takeUntil(this.subscription),
+        ).subscribe((user) => {
+            console.log(user);
+        });
         ctx.patchState({
             ...state,
             fcmAccepted: action.fcmAccepted,
@@ -51,12 +49,11 @@ export class UserProfileState implements OnDestroy {
         const userId = await this.store.selectSnapshot<any>((state: any) => state.authState?.user.id);
         // console.log(userId);
         if (userId) {
-            this.service.updateStrapiUserProfile(userId, action.userForm)
-                .pipe(
-                    takeUntil(this.subscription),
-                ).subscribe(() => {
-                    this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
-                });
+            this.service.updateStrapiUserProfile(userId, action.userForm).pipe(
+                takeUntil(this.subscription),
+            ).subscribe(() => {
+                this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
+            });
         }
     }
     @Action(UserProfileActions.UploadImage)
