@@ -5,6 +5,7 @@ import { IRegisterAddress } from "src/app/shared/types/types.interfaces";
 import { ErrorLoggingActions } from "../error-logging/error-logging.actions";
 import { MedusaService } from "src/app/shared/services/api/medusa.service";
 import { Subject, takeUntil, catchError, throwError } from "rxjs";
+import { AuthStateActions } from "../auth/auth.actions";
 
 export interface CartStateModel {
     recentCompletedOrder: any;
@@ -26,6 +27,7 @@ export const initStateModel: CartStateModel = {
 @Injectable()
 export class CartState implements OnDestroy {
     private medusaApi = inject(MedusaService);
+
     private store = inject(Store);
 
     subscription = new Subject();
@@ -98,19 +100,6 @@ export class CartState implements OnDestroy {
                 });
             });
         }
-        // else {
-        //     this.medusaApi.cartsCreate().pipe(
-        //         takeUntil(this.subscription),
-        //         catchError(err => {
-        //             const error = throwError(() => new Error(JSON.stringify(err)));
-        //             return error;
-        //         }),
-        //     ).subscribe((cart: any) => {
-        //         return ctx.patchState({
-        //             cart: cart?.cart,
-        //         });
-        //     });
-        // }
     }
     @Action(CartActions.UpdateCartBillingAddress)
     async updateCartBillingAddress(ctx: StateContext<CartStateModel>, { cartId, address }: CartActions.UpdateCartBillingAddress) {
@@ -141,19 +130,18 @@ export class CartState implements OnDestroy {
                 billing_address: editedAddress,
                 customer_id: regionRes.cart.customer_id,
             }
-            this.medusaApi.cartsUpdate(cartId, postData)
-                .pipe(
-                    takeUntil(this.subscription),
-                    catchError(err => {
-                        const error = throwError(() => new Error(JSON.stringify(err)));
-                        return error;
-                    }),
-                )
-                .subscribe((cart: any) => {
-                    ctx.patchState({
-                        cart: cart?.cart,
-                    });
+            this.medusaApi.cartsUpdate(cartId, postData).pipe(
+                takeUntil(this.subscription),
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),
+            ).subscribe((cart: any) => {
+                ctx.patchState({
+                    cart: cart?.cart,
                 });
+                this.store.dispatch(new AuthStateActions.GetSession());
+            });
         });
     }
     @Action(CartActions.UpdateCartShippingAddress)
@@ -195,149 +183,132 @@ export class CartState implements OnDestroy {
                 ctx.patchState({
                     cart: cart?.cart,
                 });
+                this.store.dispatch(new AuthStateActions.GetSession());
             });
         });
-        // try {
-        //     // console.log(cartId, address);
-        //     // console.log(regionList, regionId);
-
-        //     // let regionRes = await this.medusa.carts.update(cartId, {
-        //     //     region_id: regionId,
-        //     //     country_code: editedAddress?.country_code
-        //     // });
-        //     // let cart = await this.medusa.carts.update(cartId, {
-        //     //     shipping_address: editedAddress,
-        //     //     customer_id: regionRes.cart.customer_id,
-        //     // });
-        //     // ctx.patchState({
-        //     //     cart: cart?.cart,
-        //     // });
-        // }
-        // catch (err: any) {
-        //     if (err) {
-        //         this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-        //     }
-        // }
-    }
-    @Action(CartActions.UpdateCart)
-    async updateCart(ctx: StateContext<CartStateModel>, { cartId, customer }: CartActions.UpdateCart) {
-        try {
-            const editedCustomer: IRegisterAddress = {
-                first_name: customer?.first_name,
-                last_name: customer?.last_name,
-                address_1: customer?.address_1,
-                address_2: customer?.address_2,
-                city: customer?.city,
-                country_code: customer?.country_code,
-                postal_code: customer?.postal_code,
-                phone: customer?.phone,
-            };
-            const regionList = await this.store.selectSnapshot<any>((state: any) => state.addresses?.regionList);
-            console.log(regionList);
-
-            const region_id = await this.buildRegionCode(editedCustomer.country_code, regionList);
-            console.log(region_id);
-
-            // let regionRes = await this.medusa.carts.update(cartId, {
-            //     region_id: region_id,
-            // });
-            // let cartRes = await this.medusa.carts.update(cartId, {
-            //     billing_address: editedCustomer,
-            //     shipping_address: editedCustomer,
-            //     customer_id: regionRes.cart.customer_id,
-            // });
-            // ctx.patchState({
-            //     cart: cartRes?.cart,
-            // });
-            // this.store.dispatch(new CartActions.GetMedusaCart(cartId));
-            // this.store.dispatch(new AuthStateActions.GetSession());
-        }
-        catch (err: any) {
-            if (err) {
-                this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-            }
-        }
     }
     @Action(CartActions.AddProductMedusaToCart)
     async addProductMedusaToCart(ctx: StateContext<CartStateModel>, { cartId, quantity, variantId }: CartActions.AddProductMedusaToCart) {
-        try {
-            // let cart = await this.medusa.carts.lineItems.create(cartId, {
-            //     variant_id: variantId,
-            //     quantity: quantity
-            // });
-            // ctx.patchState({
-            //     cart: cart?.cart,
-            // });
+        const data = {
+            variant_id: variantId,
+            quantity: quantity
         }
-        catch (err: any) {
-            if (err) {
-                this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-            }
-        }
-
+        this.medusaApi.cartsUpdate(cartId, data).pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                const error = throwError(() => new Error(JSON.stringify(err)));
+                return error;
+            }),
+        ).subscribe((cart: any) => {
+        });
     }
-    @Action(CartActions.DeleteProductMedusaFromCart)
-    async deleteProductMedusaFromCart(ctx: StateContext<CartStateModel>, { cart_id, line_id }: CartActions.DeleteProductMedusaFromCart) {
-        try {
-            // let cart = await this.medusa.carts.lineItems.delete(cart_id, line_id);
-            // ctx.patchState({
-            //     cart: cart?.cart,
-            // });
-            // this.store.dispatch(new AuthStateActions.GetSession());
+    @Action(CartActions.UpdateCart)
+    async updateCart(ctx: StateContext<CartStateModel>, { cartId, customer }: CartActions.UpdateCart) {
+        const editedCustomer: IRegisterAddress = {
+            first_name: customer?.first_name,
+            last_name: customer?.last_name,
+            address_1: customer?.address_1,
+            address_2: customer?.address_2,
+            city: customer?.city,
+            country_code: customer?.country_code,
+            postal_code: customer?.postal_code,
+            phone: customer?.phone,
+        };
+        const regionList = await this.store.selectSnapshot<any>((state: any) => state.addresses?.regionList);
+        // console.log(regionList);
+        const region_id = await this.buildRegionCode(editedCustomer.country_code, regionList);
+        // console.log(region_id);
+        const data = {
+            region_id: region_id,
         }
-        catch (err: any) {
-            if (err) {
-                this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
+        this.medusaApi.cartsUpdate(cartId, data).pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                const error = throwError(() => new Error(JSON.stringify(err)));
+                return error;
+            }),
+        ).subscribe((regionRes: any) => {
+            const newData = {
+                billing_address: editedCustomer,
+                shipping_address: editedCustomer,
+                customer_id: regionRes.cart.customer_id,
             }
-        }
-    }
-    @Action(CartActions.CreateCartWithRegionId)
-    async createCartWithRegionId(ctx: StateContext<CartStateModel>, { regionId }: CartActions.CreateCartWithRegionId) {
-        this.medusaApi.cartsCreate()
-            .pipe(
+            this.medusaApi.cartsUpdate(cartId, data).pipe(
                 takeUntil(this.subscription),
                 catchError(err => {
                     const error = throwError(() => new Error(JSON.stringify(err)));
                     return error;
                 }),
-            )
-            .subscribe((cart: any) => {
+            ).subscribe((cartRes: any) => {
                 ctx.patchState({
-                    cart: cart?.cart,
+                    cart: cartRes?.cart,
                 });
+                this.store.dispatch(new CartActions.GetMedusaCart(cartId));
+                this.store.dispatch(new AuthStateActions.GetSession());
             });
+        });
     }
     @Action(CartActions.UpdateRegionCountryCart)
     async updateRegionCountryCart(ctx: StateContext<CartStateModel>, { cartId, payload }: CartActions.UpdateRegionCountryCart) {
-        // try {
-        //     let cart = await this.medusa.carts.update(cartId, {
-        //         region_id: payload.region_id != null ? payload.region_id : null,
-        //         country_code: payload?.country_code
-        //     });
-        //     this.store.dispatch(new CartActions.UpdateSelectedCountry(payload?.country_code))
-        //     this.store.dispatch(new CartActions.UpdateSelectedRegion(payload.region_id))
-        // }
-        // catch (err: any) {
-        //     if (err.response) {
-        //         this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-        //     }
-        // }
+        const data = {
+            region_id: payload.region_id != null ? payload.region_id : null,
+            country_code: payload?.country_code
+        }
+        this.medusaApi.cartsUpdate(cartId, data).pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                const error = throwError(() => new Error(JSON.stringify(err)));
+                return error;
+            }),
+        ).subscribe((cart: any) => {
+            this.store.dispatch(new CartActions.UpdateSelectedCountry(payload?.country_code))
+            this.store.dispatch(new CartActions.UpdateSelectedRegion(payload.region_id))
+        });
+    }
+    @Action(CartActions.DeleteProductMedusaFromCart)
+    async deleteProductMedusaFromCart(ctx: StateContext<CartStateModel>, { cart_id, line_id }: CartActions.DeleteProductMedusaFromCart) {
+        this.medusaApi.cartsLineItemsDelete(cart_id, line_id).pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                const error = throwError(() => new Error(JSON.stringify(err)));
+                return error;
+            }),
+        ).subscribe((cart: any) => {
+            ctx.patchState({
+                cart: cart?.cart,
+            });
+            this.store.dispatch(new AuthStateActions.GetSession());
+        });
+    }
+
+
+    @Action(CartActions.CreateCartWithRegionId)
+    async createCartWithRegionId(ctx: StateContext<CartStateModel>, { regionId }: CartActions.CreateCartWithRegionId) {
+        this.medusaApi.cartsCreate().pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                const error = throwError(() => new Error(JSON.stringify(err)));
+                return error;
+            }),
+        ).subscribe((cart: any) => {
+            ctx.patchState({
+                cart: cart?.cart,
+            });
+        });
     }
     @Action(CartActions.CompleteCart)
     completeCart(ctx: StateContext<CartStateModel>, { cartId }: CartActions.CompleteCart) {
-        return this.medusaApi.completeMedusaCart(cartId)
-            .pipe(
-                takeUntil(this.subscription),
-                catchError(err => {
-                    const error = throwError(() => new Error(JSON.stringify(err)));
-                    return error;
-                }),
-            )
-            .subscribe((cart: any) => {
-                ctx.patchState({
-                    recentCompletedOrder: cart?.data ? cart?.data : null,
-                });
+        return this.medusaApi.completeMedusaCart(cartId).pipe(
+            takeUntil(this.subscription),
+            catchError(err => {
+                const error = throwError(() => new Error(JSON.stringify(err)));
+                return error;
+            }),
+        ).subscribe((cart: any) => {
+            ctx.patchState({
+                recentCompletedOrder: cart?.data ? cart?.data : null,
             });
+        });
     }
     @Action(CartActions.UpdateSelectedRegion)
     async updateselectedRegion(ctx: StateContext<CartStateModel>, { selectedRegion }: CartActions.UpdateSelectedRegion) {

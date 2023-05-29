@@ -59,10 +59,14 @@ export class MedusaService {
         return this.http.get(`${environment.MEDUSA_API_BASE_PATH}/store/carts/${cartId}`, this.httpOptions);
     }
     cartsCreate() {
-        return this.http.post(`${environment.MEDUSA_API_BASE_PATH}/store/carts`, null,);
+        return this.http.post(`${environment.MEDUSA_API_BASE_PATH}/store/carts`, null, this.httpOptions);
     }
     cartsLineItemsAdd(cartId: string, data: { variant_id: string, quantity: number }) {
         return this.http.post(`${environment.MEDUSA_API_BASE_PATH}/store/carts/${cartId}/line-items`, data, this.httpOptions);
+    }
+    cartsLineItemsDelete(cartId: string, lineId: string) {
+        const url = `${environment.MEDUSA_API_BASE_PATH}/store/carts/${cartId}/line-items/${lineId}`;
+        return this.http.delete(url, this.httpOptions);
     }
     cartsUpdate(cartId: string, data: any) {
         return this.http.post(`${environment.MEDUSA_API_BASE_PATH}/store/carts/${cartId}`, data, this.httpOptions);
@@ -120,7 +124,8 @@ export class MedusaService {
                 metadata: {}
             }
         }
-        return this.http.post(`${environment.MEDUSA_API_BASE_PATH}/store/customers/me/addresses`, data, this.httpOptions);
+        const url = `${environment.MEDUSA_API_BASE_PATH}/store/customers/me/addresses`;
+        return this.http.post(url, data, this.httpOptions);
     }
     updateAddress(addressId: string, payload: any) {
         const data = {
@@ -133,11 +138,11 @@ export class MedusaService {
             postal_code: payload?.postal_code,
             phone: payload?.phone,
         }
-        const url = `${environment.MEDUSA_API_BASE_PATH}/store/customers/me/addresses${addressId}`;
-        return this.http.post(url, data, this.httpOptions);
+        const url = `${environment.MEDUSA_API_BASE_PATH}/store/customers/me/addresses/${addressId}`;
+        return this.http.post(url, data);
     }
     deleteAddress(addressId: string) {
         const url = `${environment.MEDUSA_API_BASE_PATH}/store/customers/me/addresses${addressId}`;
-        return this.http.delete(url, this.httpOptions);
+        return this.http.delete(url);
     }
 }

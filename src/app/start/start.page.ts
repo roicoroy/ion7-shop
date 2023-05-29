@@ -12,6 +12,4 @@ import { IonicModule } from '@ionic/angular';
 })
 export class StartPage {
   public environmentInjector = inject(EnvironmentInjector);
-
-  constructor() { }
 }

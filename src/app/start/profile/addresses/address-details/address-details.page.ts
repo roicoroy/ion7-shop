@@ -91,18 +91,17 @@ export class AddressDetailsPage implements OnInit, OnDestroy {
     //   this.initialAddressesArrayLength = vs.customer.shipping_addresses.length;
     //   console.log(this.initialAddressesArrayLength);
     // });
-
     this.adressDetailsForm = this.formBuilder.group({
-      id: new FormControl('ID211232323'),
-      first_name: new FormControl('Ric', Validators.required),
-      last_name: new FormControl('Watanabe', Validators.required),
-      address_1: new FormControl('24/45', Validators.required),
-      address_2: new FormControl('Haven Place', Validators.required),
-      region_code: new FormControl(''),
-      country: new FormControl(''),
-      city: new FormControl('Gapira', Validators.required),
-      postal_code: new FormControl('ED00OK', Validators.required),
-      phone: new FormControl('433434343', Validators.compose([
+      id: new FormControl(),
+      first_name: new FormControl(null, Validators.required),
+      last_name: new FormControl(null, Validators.required),
+      address_1: new FormControl(null, Validators.required),
+      address_2: new FormControl(null, Validators.required),
+      region_code: new FormControl(null),
+      country: new FormControl(null),
+      city: new FormControl(null, Validators.required),
+      postal_code: new FormControl(null, Validators.required),
+      phone: new FormControl(null, Validators.compose([
         Validators.required,
       ])),
     });
@@ -115,20 +114,17 @@ export class AddressDetailsPage implements OnInit, OnDestroy {
         take(1),
       )
       .subscribe((address: IRegisterAddress) => {
-        console.log(address.address_1);
         if (address.address_1 && address.address_2) {
           this.isNewAddress = false;
           this.populateEditForm(address);
         }
         if (!address.address_1 && !address.address_1) {
-          console.log(this.isNewAddress);
           this.isNewAddress = true;
         }
       }
       )
   }
   async populateEditForm(address: IRegisterAddress) {
-    // console.log(address);
     const regionList = this.store.selectSnapshot<any>((state) => state.addresses.regionList);
     const region_code = buildRegionCode(address?.country_code, regionList);
     this.store.dispatch([
@@ -150,7 +146,6 @@ export class AddressDetailsPage implements OnInit, OnDestroy {
     ]);
   }
   saveEditedAddress() {
-    // console.log(this.adressDetailsForm);
     const address: IRegisterAddress = {
       first_name: this.adressDetailsForm.get('first_name').value,
       last_name: this.adressDetailsForm.get('last_name').value,
@@ -198,22 +193,22 @@ export class AddressDetailsPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next(null);
     this.ngUnsubscribe.complete();
-    // this.store.dispatch([
-    //   new UpdateFormValue({
-    //     path: 'addresses.adressDetailsForm',
-    //     value: {
-    //       first_name: null,
-    //       last_name: null,
-    //       address_1: null,
-    //       address_2: null,
-    //       region_code: null,
-    //       country: null,
-    //       city: null,
-    //       postal_code: null,
-    //       phone: null,
-    //     },
-    //   }),
-    // ]);
+    this.store.dispatch([
+      new UpdateFormValue({
+        path: 'addresses.adressDetailsForm',
+        value: {
+          first_name: null,
+          last_name: null,
+          address_1: null,
+          address_2: null,
+          region_code: null,
+          country: null,
+          city: null,
+          postal_code: null,
+          phone: null,
+        },
+      }),
+    ]);
   }
 }
 

@@ -16,6 +16,7 @@ import { ChangePasswordModalComponent } from "./change-password-modal/change-pas
 import { ImagePickerComponent } from "./image-picker/image-picker.component";
 import { LanguageComponent } from "../../../components/components/language-component/language.component";
 import { UserProfileActions } from "src/app/store/user-profile/user-profile.actions";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: 'app-user',
@@ -97,6 +98,9 @@ export class UserPage {
     });
     this.viewState$
       .subscribe((vs) => {
+        
+        console.log(vs);
+
         if (vs?.user != null) {
           this.userForm.get('username').setValue(vs.user.username);
           this.userForm.get('email').setValue(vs.user.email);
@@ -133,18 +137,15 @@ export class UserPage {
     console.log(this.userForm.value);
     this.store.dispatch(new UserProfileActions.UpdateStrapiUser(this.userForm.value));
   }
-  uploadProfilePicture(formData: FormData) {
+  async uploadProfilePicture(formData: FormData) {
     this.facade.appUploadProfileImage(formData);
   }
   async onImagePicked(file: any) {
     const response = await fetch(file);
     const blob = await response.blob();
-    const blobs = new Blob([blob], { type: "text/xml" });
     const formData = new FormData();
     formData.append('files', blob, file.name);
-    this.formData.append('files', blob, file.name);
-    this.uploadProfilePicture(formData);
-    return this.formData;
+    return this.uploadProfilePicture(formData);
   }
   changePasswordPage() {
     // this.navigation.navigateForward('/home', 'back');

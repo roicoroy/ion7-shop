@@ -4,6 +4,7 @@ import * as Color from 'color';
 import { Store } from '@ngxs/store';
 import { Subject, takeUntil } from 'rxjs';
 import { StrapiService } from '../api/strapi.service';
+import { ThemeActions } from 'src/app/store/theme/theme.action';
 
 const defaults = {
     primary: '#3880ff',
@@ -151,7 +152,7 @@ function contrast(color: { isDark: () => any; lighten: (arg0: number) => any; da
 @Injectable({
     providedIn: 'root'
 })
-export class ThemeService implements OnDestroy {
+export class ThemeGenerationService implements OnDestroy {
 
     private readonly ngUnsubscribe = new Subject();
 

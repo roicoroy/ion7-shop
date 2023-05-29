@@ -62,12 +62,12 @@ export class CartAddressesPage implements OnInit, OnDestroy {
   async useBillingAddress(address: IRegisterAddress) {
     const cartId = await this.store.selectSnapshot<any>((state: any) => state.cart.cart?.id);
     this.store.dispatch(new CartActions.UpdateCartBillingAddress(cartId, address));
-    this.store.dispatch(new CustomerActions.AddAShippingAddress(address));
+    // this.store.dispatch(new CustomerActions.AddAShippingAddress(address));
   }
   async useShippingAddress(address: IRegisterAddress) {
     const cartId = await this.store.selectSnapshot<any>((state: any) => state.cart.cart?.id);
     this.store.dispatch(new CartActions.UpdateCartShippingAddress(cartId, address));
-    this.store.dispatch(new CustomerActions.AddAShippingAddress(address));
+    // this.store.dispatch(new CustomerActions.AddAShippingAddress(address));
   }
   details(address: IRegisterAddress) {
     console.log(address);

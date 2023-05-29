@@ -4,38 +4,46 @@ import { Store } from "@ngxs/store";
 import { Observable, Subject, takeUntil } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AuthStateActions } from "../auth/auth.actions";
+import { ICustomer } from "src/app/shared/types/types.interfaces";
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserProfileStateService implements OnDestroy {
     headers = new HttpHeaders().set('Content-Type', 'multipart/form-data');
-
+    headersJson = new HttpHeaders().set('Content-Type', 'application/json');
+    httpOptions = {
+        headers: new HttpHeaders({
+            'Content-Type': 'multipart/form-data',
+        }),
+        withCredentials: true,
+    };
     // private store = inject(Store);
 
     private httpClient = inject(HttpClient);
 
     subscription = new Subject();
 
-    uploadStrapiImageToServer(formData: FormData): Observable<any> {
-        return this.httpClient.post(environment.BASE_PATH + '/api/upload', formData, { headers: this.headers });
+    uploadStrapiImageToServer(formData: FormData): Observable<ICustomer> {
+        return this.httpClient.post(environment.BASE_PATH + '/api/upload', formData);
     }
-    setProfileImage(userId: string, fileId: number): Observable<any> {
-        return this.httpClient.put(environment.BASE_PATH + '/api/users/' + userId, {
+    setProfileImage(userId: string, fileId: number) {
+        const postData: any = {
             data: {
                 attachments: fileId,
             },
             avatar: fileId,
-        }, { headers: this.headers });
+        }
+        return this.httpClient.put(`${environment.BASE_PATH}/api/users/${userId}`, postData);
     }
-    public updateStrapiUserFcm(userId: string, accepted_fcm: boolean, device_token: string): Observable<any> {
-        return this.httpClient.put(environment.BASE_PATH + '/api/users/' + userId, {
+    updateStrapiUserFcm(userId: string, accepted_fcm: boolean, device_token: string): Observable<ICustomer> {
+        const postData = {
             accepted_fcm: accepted_fcm,
             device_token: '123',
         }
-        );
+        return this.httpClient.put(environment.BASE_PATH + '/api/users/' + userId, postData);
     }
-    public updateStrapiUserProfile(userId: string, profileForm: any): Observable<any> {
+    updateStrapiUserProfile(userId: string, profileForm: any): Observable<ICustomer> {
         const data = {
             email: profileForm?.email,
             first_name: profileForm?.first_name,
@@ -44,34 +52,8 @@ export class UserProfileStateService implements OnDestroy {
         };
         return this.httpClient.put(environment.BASE_PATH + '/api/users/' + userId, data);
     }
-    public loadUser(userId: string) {
+    loadUser(userId: string): Observable<ICustomer> {
         return this.httpClient.get(environment.BASE_PATH + '/api/users/' + userId + '?populate=*', { headers: this.headers })
-    }
-    public uploadData(formData: FormData, userId?: string) {
-        return this.httpClient.post(environment.BASE_PATH + '/api/upload', formData, { headers: this.headers })
-            .pipe(
-                takeUntil(this.subscription),
-            )
-            .subscribe((response: any) => {
-                if (response.length > 0) {
-                    const fileId = response[0].id;
-                    if (userId) {
-                        this.httpClient.put(environment.BASE_PATH + '/api/users/' + userId, {
-                            data: {
-                                attachments: fileId,
-                            },
-                            avatar: fileId,
-                        })
-                        // .pipe(
-                        //     takeUntil(this.subscription),
-                        // ).subscribe((res: any) => {
-                        //     if (res) {
-                        //         this.store.dispatch(new AuthStateActions.LoadStrapiUser(res.id));
-                        //     }
-                        // });
-                    }
-                }
-            });
     }
     ngOnDestroy() {
         this.subscription.next(null);

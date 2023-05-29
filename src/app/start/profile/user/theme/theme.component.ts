@@ -7,7 +7,7 @@ import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { ThemeService } from 'src/app/shared/services/theme/theme-generation.service';
+import { ThemeService } from 'src/app/store/theme/theme.service';
 
 @Component({
   selector: 'app-theme',
@@ -33,11 +33,11 @@ export class ThemeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.theme.themeInit();
-    // this.appDarkMode$ = this.theme.darkMode;
-    // this.appDarkModeIcon$ = this.theme.darkModeIcon;
+    this.theme.themeInit();
+    this.appDarkMode$ = this.theme.darkMode;
+    this.appDarkModeIcon$ = this.theme.darkModeIcon;
   }
   onChangeTheme(theme: any) {
-    // this.theme.changeTheme(theme);
+    this.theme.changeTheme(theme);
   }
 }

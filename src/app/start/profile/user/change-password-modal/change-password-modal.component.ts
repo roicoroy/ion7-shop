@@ -63,68 +63,12 @@ export class ChangePasswordModalComponent implements OnInit {
   public passwordError: IErrorRes;
 
   private modalCtrl = inject(ModalController);
-  private cd = inject(ChangeDetectorRef);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private translate = inject(TranslateService);
 
   ngOnInit() {
-    // this.oldUserObj = this.authService.getUser();
-
-    // if (this.oldUserObj) {
-    //   this.userObj = {
-    //     ...this.oldUserObj
-    //   };
-
-    //   this.formGroup.setValue({
-    //     username: this.userObj.username,
-    //     email: this.userObj.email
-    //   });
-    // }
-
-    // this.authService.UserState.subscribe(() => {
-    //   this.oldUserObj = this.authService.getUser();
-    //   this.userObj = {
-    //     ...this.oldUserObj
-    //   };
-
-    //   this.formGroup.setValue({
-    //     username: this.userObj.username,
-    //     email: this.userObj.email
-    //   });
-    // });
   }
   public resetPassword(): void {
-    // this.authService
-    //   .resetPassword(this.passwordResetReq)
-    //   .then(() => {
-    //     this.router.navigateByUrl(this.authService.LoginUrl);
-    //   })
-    //   .catch((err: HttpErrorResponse) => {
-    //     this.error = err.error;
-    //   });
   }
   public updatePassword(): void {
-    // const updateRequest: IReqPasswordUpdate = {
-    //   password: this.passwordFormGroup.value.password,
-    //   oldPassword: this.passwordFormGroup.value.oldPassword
-    // };
-
-    // if (!updateRequest.password || !updateRequest.oldPassword) {
-    //   return;
-    // }
-
-    // this.authService
-    //   .updateProfile(updateRequest)
-    //   .then(() => {
-    //     this.passwordError = null;
-
-    //     this.passwordFormGroup.reset();
-    //     this.passwordFormGroup.markAsPristine();
-    //   })
-    //   .catch((err: HttpErrorResponse) => {
-    //     this.passwordError = err.error;
-    //   });
   }
   async submitForm() {
     await this.modalCtrl.dismiss();

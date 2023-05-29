@@ -14,7 +14,6 @@ import { Capacitor } from '@capacitor/core';
 import { IonicModule, Platform } from '@ionic/angular';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxsModule } from '@ngxs/store';
@@ -36,7 +35,7 @@ import { scaleHeight } from 'src/app/shared/animations/animations';
   ],
 })
 export class ImagePickerComponent implements OnInit {
-  @ViewChild('formElementRef', { static: false }) formElementRef: ElementRef<HTMLFormElement>;
+  // @ViewChild('formElementRef', { static: false }) formElementRef: ElementRef<HTMLFormElement>;
   @Output() imagePick = new EventEmitter<any>();
   @Input() userAvatar: string;
   selectedImage: string;
@@ -60,11 +59,11 @@ export class ImagePickerComponent implements OnInit {
       quality: 50,
     });
     const savedPhoto = await this.savePicture(capturedPhoto);
-    // console.log(savedPhoto);
+    console.log(savedPhoto);
     this.imagePick.emit(savedPhoto.webviewPath);
     // this.selectedImage = await onLoadImage(savedPhoto);
     this.selectedImage = savedPhoto.webviewPath;
-    // console.log(savedPhoto);
+    console.log(savedPhoto);
   }
   private async savePicture(cameraPhoto: Photo) {
     const base64Data = await this.readAsBase64(cameraPhoto);

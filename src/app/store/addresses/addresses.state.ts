@@ -44,9 +44,7 @@ export class AddressesState implements OnDestroy {
     }
     @Action(AddressesActions.GetRegionList)
     async getMedusaRegionList(ctx: StateContext<AddressesStateModel>) {
-        // const regions$ = from(this.medusaClient.regions.list());
         const regions$ = this.medusaApi.regionsList();
-
         regions$.pipe(
             takeUntil(this.subscription),
             catchError(err => {
@@ -55,15 +53,13 @@ export class AddressesState implements OnDestroy {
                 return throwError(() => new Error(err));
             })
         ).subscribe((response: any) => {
-            console.log(response);
             ctx.patchState({
                 regionList: response?.regions,
             });
         });
     }
     @Action(AddressesActions.GetCountries)
-    async getCountries(ctx: StateContext<AddressesStateModel>, { regionId }: AddressesActions.GetCountries) {
-        // const region$ = from(this.medusaClient?.regions?.retrieve(regionId));
+    getCountries(ctx: StateContext<AddressesStateModel>, { regionId }: AddressesActions.GetCountries) {
         const region$ = this.medusaApi.regionsRetrieve(regionId);;
         region$.pipe(
             takeUntil(this.subscription),

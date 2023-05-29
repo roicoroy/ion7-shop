@@ -48,11 +48,10 @@ export class AddressesPage implements OnInit, OnDestroy {
     this.router.navigate(['address-details'], { queryParams: { address: null } });
   }
   details(address: IRegisterAddress) {
-    console.log(address);
     this.router.navigate(['address-details'], { queryParams: address });
   }
 
-  async delete(addressId: string) {
+  delete(addressId: string) {
     this.store.dispatch(new CustomerActions.DeleteCustomerAddress(addressId));
   }
 

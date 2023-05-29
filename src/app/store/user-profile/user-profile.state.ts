@@ -31,23 +31,22 @@ export class UserProfileState implements OnDestroy {
         const state = ctx.getState();
         // console.log(state);
         const userId = this.store.selectSnapshot<any>((state: any) => state.authState?.userId);
-        this.service.updateStrapiUserFcm(userId, action.fcmAccepted, '123').pipe(
-            takeUntil(this.subscription),
-        ).subscribe((user) => {
-            console.log(user);
-        });
-        ctx.patchState({
-            ...state,
-            fcmAccepted: action.fcmAccepted,
-        });
+        this.service.updateStrapiUserFcm(userId, action.fcmAccepted, '123')
+            .pipe(
+                takeUntil(this.subscription),
+            )
+            .subscribe((user) => {
+                console.log(user);
+                this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
+                ctx.patchState({
+                    ...state,
+                    fcmAccepted: action.fcmAccepted,
+                });
+            });
     }
     @Action(UserProfileActions.UpdateStrapiUser)
     async updateStrapiUser(ctx: StateContext<UserProfileModel>, action: UserProfileActions.UpdateStrapiUser): Promise<void> {
-        // console.log(action);
-        const state = ctx.getState();
-        // console.log(state);
         const userId = await this.store.selectSnapshot<any>((state: any) => state.authState?.user.id);
-        // console.log(userId);
         if (userId) {
             this.service.updateStrapiUserProfile(userId, action.userForm).pipe(
                 takeUntil(this.subscription),
@@ -57,11 +56,23 @@ export class UserProfileState implements OnDestroy {
         }
     }
     @Action(UserProfileActions.UploadImage)
-    uploadImage(ctx: StateContext<UserProfileModel>, action: UserProfileActions.UploadImage): void {
+    async uploadImage(ctx: StateContext<UserProfileModel>, action: UserProfileActions.UploadImage): Promise<void> {
         const userId = this.store.selectSnapshot<any>((state: any) => state.authState?.user.id);
-        this.service.uploadData(action.imageForm, userId);
-        this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
-
+        this.service.uploadStrapiImageToServer(action.imageForm)
+            .pipe(
+                takeUntil(this.subscription),
+            )
+            .subscribe((response: any) => {
+                const fileId = response[0].id;
+                this.service.setProfileImage(userId, fileId)
+                    .pipe(
+                        takeUntil(this.subscription),
+                    )
+                    .subscribe((user: any) => {
+                        console.log(user);
+                        this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
+                    });;
+            });
     }
     ngOnDestroy() {
         this.subscription.next(null);

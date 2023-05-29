@@ -31,7 +31,6 @@ export class EmailPasswordState {
         this.emailPasswordService.loginEmailPassword(email, password)
             .pipe(
                 tap((user: any) => {
-                    console.log(user);
                     return this.store.dispatch(new AuthStateActions.SetAuthState(user));
                 }),
                 catchError(err => {

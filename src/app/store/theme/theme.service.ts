@@ -12,7 +12,7 @@ export const DARK_MODE = 'dark_mode';
 export class ThemeService implements OnDestroy {
   public darkMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public darkModeIcon: BehaviorSubject<string> = new BehaviorSubject<string>('');
-
+  
   private readonly ngUnsubscribe = new Subject();
 
   constructor(
@@ -22,7 +22,6 @@ export class ThemeService implements OnDestroy {
 
   themeInit() {
     const isDarkMode = this.store.selectSnapshot<any>((state: any) => state.theme?.isDarkMode);
-    // console.log(isDarkMode);
     if (isDarkMode) {
       this.document.body.classList.toggle('dark', true);
       this.darkMode.next(true);
@@ -37,7 +36,6 @@ export class ThemeService implements OnDestroy {
     this.store.dispatch(new ThemeActions.SetDarkMode(isDarkMode.detail.checked))
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((state) => {
-        console.log(state.theme.isDarkMode);
         if (state.theme.isDarkMode) {
           this.document.body.classList.toggle('dark', state.theme.isDarkMode);
           this.darkModeIcon.next('moon');

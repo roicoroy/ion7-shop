@@ -22,11 +22,10 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
             return next.handle(clonedReq) || null;
         }
         if (request.url.indexOf(environment.API_BASE_PATH) === 0) {
-
             return this.storage.getKeyAsObservable('token')
                 .pipe(
+                    take(1),
                     mergeMap((token) => {
-                        console.log(token);
                         const clonedReq = this.addToken(request, token);
                         return next.handle(clonedReq) || null;
                     }),
@@ -46,16 +45,11 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
         return request;
     }
     private medusaRequest(request: HttpRequest<any>) {
-        // console.log('medusa interceptor');
-        // const win = window.cook;
-        // console.log(win.get());
-
-        // return request;
         const clone: HttpRequest<any> = request.clone({
             setHeaders: {
                 'Content-Type': 'application/json',
             },
-            withCredentials:true
+            withCredentials: true
         });
         return clone;
     }

@@ -164,7 +164,7 @@ export class AddressDetailsPage implements OnInit, OnDestroy {
     };
     if (this.cartAdressDetailsForm.valid) {
       this.store.dispatch(new CustomerActions.UpdateCustomerAddress(this.cartAdressDetailsForm.get('id').value, address));
-      this.navigation.navControllerDefault('checkout/pages//cart-addresses');
+      this.navigation.navControllerDefault('checkout/pages/cart-addresses');
     }
   }
   saveNewAddress() {

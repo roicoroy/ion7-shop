@@ -5,6 +5,7 @@ import { ErrorLoggingActions } from '../error-logging/error-logging.actions';
 import { AuthStateActions } from '../auth/auth.actions';
 import { Subject, catchError, takeUntil, throwError } from 'rxjs';
 import { MedusaService } from 'src/app/shared/services/api/medusa.service';
+import { ICustomer } from 'src/app/shared/types/types.interfaces';
 
 export class CustomerStateModel {
     customer: any;
@@ -25,52 +26,45 @@ export class CustomerState implements OnDestroy {
 
     @Action(CustomerActions.AddAShippingAddress)
     async addaShippingAddress(ctx: StateContext<CustomerStateModel>, { payload }: CustomerActions.AddAShippingAddress) {
-        console.log(payload)
-        const customer$ = this.medusaApi.addAddress(payload);
-        customer$.pipe(
-            takeUntil(this.subscription),
-            catchError(err => {
-                console.log('Handling error locally and rethrowing it...', err);
-                this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-                return throwError(() => new Error(err));
-            })
-        ).subscribe((response: any) => {
-            // console.log(response);
-            this.store.dispatch(new AuthStateActions.GetSession());
-        });
+        return this.medusaApi.addAddress(payload)
+            .pipe(
+                takeUntil(this.subscription),
+                catchError(err => {
+                    console.log('Handling error locally and rethrowing it...', err);
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
+                    return throwError(() => new Error(err));
+                })
+            ).subscribe(() => {
+                this.store.dispatch(new AuthStateActions.GetSession());
+            });
     }
     @Action(CustomerActions.UpdateCustomerAddress)
     async updateCustomerAddress(ctx: StateContext<CustomerStateModel>, { addressId, payload }: CustomerActions.UpdateCustomerAddress) {
-        this.store.dispatch(new AuthStateActions.GetSession());
-
-        const customer$ = this.medusaApi.updateAddress(addressId, payload);
-        customer$.pipe(
-            takeUntil(this.subscription),
-            catchError(err => {
-                console.log('Handling error locally and rethrowing it...', err);
-                this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-                return throwError(() => new Error(err));
-            })
-        ).subscribe((response: any) => {
-            // console.log(response);
-            this.store.dispatch(new AuthStateActions.GetSession());
-        });
+        return this.medusaApi.updateAddress(addressId, payload)
+            .pipe(
+                takeUntil(this.subscription),
+                catchError(err => {
+                    console.log('Handling error locally and rethrowing it...', err);
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
+                    return throwError(() => new Error(err));
+                })
+            ).subscribe((customer: ICustomer) => {
+                this.store.dispatch(new AuthStateActions.GetSession());
+            });
     }
     @Action(CustomerActions.DeleteCustomerAddress)
     async deleteCustomerAddress(ctx: StateContext<CustomerStateModel>, { addressId }: CustomerActions.DeleteCustomerAddress) {
-        const customer$ = this.medusaApi.deleteAddress(addressId);
-        customer$.pipe(
-            takeUntil(this.subscription),
-            catchError(err => {
-                console.log('Handling error locally and rethrowing it...', err);
-                this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
-                return throwError(() => new Error(err));
-            })
-        ).subscribe((response: any) => {
-            // console.log(response);
-            this.store.dispatch(new AuthStateActions.GetSession());
-        });
-        this.store.dispatch(new AuthStateActions.GetSession());
+        this.medusaApi.deleteAddress(addressId)
+            .pipe(
+                takeUntil(this.subscription),
+                catchError(err => {
+                    console.log('Handling error locally and rethrowing it...', err);
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(err));
+                    return throwError(() => new Error(err));
+                })
+            ).subscribe((response: any) => {
+                this.store.dispatch(new AuthStateActions.GetSession());
+            });
     }
     ngOnDestroy() {
         this.subscription.next(null);

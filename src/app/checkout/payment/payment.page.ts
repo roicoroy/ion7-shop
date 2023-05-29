@@ -13,6 +13,8 @@ import { NgxStripeModule, StripePaymentElementComponent, StripeService } from 'n
 import { ConfirmPaymentData, StripeElementsOptions } from '@stripe/stripe-js';
 import { UtilityService } from 'src/app/shared/services/utility/utility.service';
 import { CartActions } from 'src/app/store/cart/cart.actions';
+import { AuthStateActions } from 'src/app/store/auth/auth.actions';
+import { AddressesActions } from 'src/app/store/addresses/addresses.actions';
 
 @Component({
   selector: 'app-payment',
@@ -86,32 +88,35 @@ export class PaymentPage implements OnDestroy {
     }
 
     this.utility.presentLoading('...');
+
     return this.stripeService.confirmPayment({
       elements: this.paymentElement?.elements,
       // confirmParams: confirmPaymentData,
       redirect: 'if_required'
-    })
-      .pipe(takeUntil(this.ngUnsubscribe))
+    }).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(async (result: any) => {
-
         console.log(result);
 
         if (result.error) {
           this.utility.dismissLoading();
+
           this.utility.showToast(result.error?.message, 'middle', 1500);
         }
         if (!result.error) {
 
-          this.store.dispatch(new CartActions.CompleteCart(cartId))
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(async (cartState: any) => {
-              console.log(cartState);
-            });
-          // this.store.dispatch(new MedusaActions.LogOut());
-          // this.store.dispatch(new CartActions.LogOut());
-          // this.store.dispatch(new AddressesActions.LogOut());
-          // this.store.dispatch(new MedusaActions.UnSetSecretKey());
-          // this.store.dispatch(new CartActions.ClearIsGuest());
+          this.store.dispatch(new AuthStateActions.GetSession());
+
+          setTimeout(() => {
+            this.store.dispatch(new CartActions.CompleteCart(cartId))
+              .pipe(takeUntil(this.ngUnsubscribe))
+              .subscribe(async (cartState: any) => {
+                console.log(cartState);
+                this.navigateToReview();
+              });
+          }, 200);
+          this.store.dispatch(new CartActions.LogOut());
+          this.store.dispatch(new AddressesActions.LogOut());
+          this.store.dispatch(new CartActions.ClearIsGuest());
           this.utility.dismissLoading()
           // .then(() => this.navigateToReview());
         }

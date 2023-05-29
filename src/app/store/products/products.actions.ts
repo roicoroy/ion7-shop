@@ -1,5 +1,3 @@
-// import ProductsResource from "@medusajs/medusa-js/dist/resources/products";
-// import { Order, Customer, Product } from "@medusajs/medusa"
 
 export namespace ProductsActions {
     export class GetProductList {
