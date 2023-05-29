@@ -60,7 +60,6 @@ export class AuthState implements OnDestroy {
     @Action(AuthStateActions.LoadApp)
     async loadApp(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
-        console.log('load app', state);
         this.store.dispatch(new AuthStateActions.GetSession());
         if (!state.customer) {
             this.store.dispatch(new AuthStateActions.GetSession());
@@ -114,7 +113,6 @@ export class AuthState implements OnDestroy {
                             const error = throwError(() => new Error(JSON.stringify(err)));
                             return error;
                         }),
-
                     ).subscribe((customer: any) => {
                             this.store.dispatch(new AuthStateActions.LoadStrapiUser(user.user.id));
                             return ctx.patchState({
@@ -131,7 +129,6 @@ export class AuthState implements OnDestroy {
     async getSession(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
         this.medusa.getMedusaSession().subscribe((customer: any) => {
-            console.log('session', customer.customer);
             ctx.patchState({
                 ...state,
                 customer: customer.customer,

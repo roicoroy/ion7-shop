@@ -47,8 +47,6 @@
                     <ion-list-header>
                         <ion-label> Customer Orders </ion-label>
                     </ion-list-header>
-
-
                     <ion-item *ngFor="let order of vs.customer?.orders">
                         <ion-button (click)="openOrderDetails(order.id)" expand="block" fill="clear" shape="round">
                             {{ order.created_at | date }}
