@@ -18,8 +18,8 @@
   <ion-item lines="none" *ngFor="let item of availableLanguages" (click)="selectLanguage(item)">
     <ion-col size="12">
       <ion-radio-group [value]="selectedLanguage">
-        <ion-label>{{ item.name }}</ion-label>
-        <ion-radio [value]="item.code"></ion-radio>
+        <ion-label>{{ item?.name }}</ion-label>
+        <ion-radio [value]="item?.code"></ion-radio>
       </ion-radio-group>
     </ion-col>
   </ion-item>

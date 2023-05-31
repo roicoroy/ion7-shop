@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Device } from '@capacitor/device';
 import { LanguageModel } from './language.model';
-import { StorageService } from '../storage/ionstorage.service';
+import { TokenService } from '../token/token.service';
 
 export const SAVED_LANGUAGE = 'saved_language';
 
@@ -14,7 +14,7 @@ export class LanguageService {
 
   constructor(
     public translate: TranslateService,
-    private storageService: StorageService
+    private storageService: TokenService
   ) { }
 
   getLanguages(): any {

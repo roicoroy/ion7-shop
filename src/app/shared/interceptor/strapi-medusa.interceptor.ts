@@ -1,11 +1,11 @@
 
 import { HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { throwError } from 'rxjs';
 import { mergeMap, take } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { TokenService } from '../services/token/token.service';
+import { throwError } from 'rxjs';
+import { StorageService } from '../services/storage/ionstorage.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,18 +14,18 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
     tokenObservable: any;
     message: any = 'error message';
     token: string;
-    private storage = inject(TokenService);
+    private storage = inject(StorageService);
 
     intercept(request: HttpRequest<any>, next: HttpHandler): any {
         if (request.url.indexOf(environment.MEDUSA_API_BASE_PATH) === 0) {
             const clonedReq = this.medusaRequest(request);
             return next.handle(clonedReq) || null;
-        }
-        if (request.url.indexOf(environment.API_BASE_PATH) === 0) {
+        } else {
             return this.storage.getKeyAsObservable('token')
                 .pipe(
                     take(1),
-                    mergeMap((token) => {
+                    mergeMap(res => {
+                        const token = res.value;
                         const clonedReq = this.addToken(request, token);
                         return next.handle(clonedReq) || null;
                     }),
@@ -37,20 +37,21 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
         if (token) {
             const clone: HttpRequest<any> = request.clone({
                 setHeaders: {
-                    Authorization: `Bearer ${token}`,
-                },
+                    Authorization: `Bearer ${token}`
+                }
             });
             return clone;
         }
         return request;
     }
     private medusaRequest(request: HttpRequest<any>) {
-        const clone: HttpRequest<any> = request.clone({
-            setHeaders: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true
-        });
-        return clone;
+        return  request
+        // const clone: HttpRequest<any> = request.clone({
+        //     setHeaders: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     withCredentials: true
+        // });
+        // return clone;
     }
 }

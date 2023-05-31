@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { IonicModule } from '@ionic/angular';
+import { Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { IRegisterAddress } from 'src/app/shared/types/types.interfaces';
 import { CartAddressesFacade, ICartAddressesFacadeState } from './cart-addresses.facade';
@@ -25,8 +25,6 @@ import { NavigationService } from 'src/app/shared/services/navigation/navigation
   ]
 })
 export class CartAddressesPage implements OnInit, OnDestroy {
-
-  private modalCtrl = inject(ModalController);
   private router = inject(Router);
   private facade = inject(CartAddressesFacade);
   private store = inject(Store);
@@ -36,25 +34,9 @@ export class CartAddressesPage implements OnInit, OnDestroy {
 
   viewState$: Observable<ICartAddressesFacadeState>;
 
-  constructor() { }
-
   ngOnInit() {
     this.store.dispatch(new AddressesActions.GetRegionList());
     this.viewState$ = this.facade.viewState$;
-    this.viewState$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((vs) => {        
-        // console.log(vs.cart?.billing_address?.id);
-        // console.log(vs.cart?.shipping_address?.id);
-        // console.log(vs?.session);
-        // // console.log(vs.customer.shipping_addresses);
-        // vs.session?.shipping_addresses.forEach((address: any) => {
-        //   console.log(address?.id);
-        // });
-        // vs.customer?.shipping_addresses.forEach((address: any) => {
-        //   console.log(address?.id);
-        // });
-      });
   }
   addAddress() {
     this.router.navigate(['checkout/pages/cart-address-details'], { queryParams: { address: null } });
@@ -62,12 +44,10 @@ export class CartAddressesPage implements OnInit, OnDestroy {
   async useBillingAddress(address: IRegisterAddress) {
     const cartId = await this.store.selectSnapshot<any>((state: any) => state.cart.cart?.id);
     this.store.dispatch(new CartActions.UpdateCartBillingAddress(cartId, address));
-    // this.store.dispatch(new CustomerActions.AddAShippingAddress(address));
   }
   async useShippingAddress(address: IRegisterAddress) {
     const cartId = await this.store.selectSnapshot<any>((state: any) => state.cart.cart?.id);
     this.store.dispatch(new CartActions.UpdateCartShippingAddress(cartId, address));
-    // this.store.dispatch(new CustomerActions.AddAShippingAddress(address));
   }
   details(address: IRegisterAddress) {
     console.log(address);

@@ -16,7 +16,6 @@ import { ChangePasswordModalComponent } from "./change-password-modal/change-pas
 import { ImagePickerComponent } from "./image-picker/image-picker.component";
 import { LanguageComponent } from "../../../components/components/language-component/language.component";
 import { UserProfileActions } from "src/app/store/user-profile/user-profile.actions";
-import { environment } from "src/environments/environment";
 
 @Component({
   selector: 'app-user',

@@ -35,10 +35,12 @@ export class LanguageComponent {
   }
   selectLanguage(item: any) {
     this.selectedLanguage = item?.code;
-    this.translate.use(this.selectedLanguage);
-    this.storageService.storageSet(SAVED_LANGUAGE, this.selectedLanguage);
-    this.popoverController.dismiss();
-    this.getTranslations();
+    console.log(item?.code);
+    this.translate.use(item?.code).subscribe(async () => {
+      await this.storageService.storageSet(SAVED_LANGUAGE, this.selectedLanguage);
+      await this.popoverController.dismiss();
+    });
+    // this.getTranslations();
   }
   getTranslations() {
     this.translate.getTranslation(this.translate.currentLang)

@@ -23,10 +23,6 @@ export class CheckoutFacade {
 
     @Select(AuthState.isLoggedIn) isLoggedIn$: Observable<any>;
 
-    private store = inject(Store);
-
-    private utility = inject(UtilityService);
-
     readonly viewState$: Observable<ICheckoutFacadeState>;
 
     constructor() {

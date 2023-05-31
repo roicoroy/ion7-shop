@@ -13,7 +13,8 @@ import { ProductsActions } from '../store/products/products.actions';
 export class ShopResolver implements Resolve<Observable<any>> {
     private store = inject(Store);
     resolve(): Observable<any> {
-        return this.store.dispatch(new AuthStateActions.LoadApp());
+        return null;
+        // return this.store.dispatch(new AuthStateActions.LoadApp());
         // this.store.dispatch(new CartActions.CreateMedusaCart());
         // this.store.dispatch(new AddressesActions.GetRegionList());
         // return this.store.dispatch(new ProductsActions.GetProductList());

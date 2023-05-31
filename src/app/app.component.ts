@@ -18,6 +18,7 @@ import { AppFacade, IAppFacadeState } from './app.facade';
 import { ProductsActions } from './store/products/products.actions';
 import { ThemeService } from './store/theme/theme.service';
 import { KeyboardService } from './shared/services/native/keyboard/keyboard.service';
+import { LanguageService } from './shared/services/language/language.service';
 
 @Component({
   selector: 'app-root',
@@ -53,12 +54,14 @@ export class AppComponent implements OnInit, OnDestroy {
   private facade = inject(AppFacade);
   private menu = inject(MenuController);
   private navigation = inject(NavigationService);
+  
   private keyboardService = inject(KeyboardService);
+  
+  private language = inject(LanguageService);
   
   private readonly ngUnsubscribe = new Subject();
 
   viewState$: Observable<IAppFacadeState>;
-
 
   async ngOnInit(): Promise<void> {
     await this.initApp();
@@ -68,6 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.platform.ready().then(async () => {
       this.viewState$ = this.facade.viewState$;
       this.theme.themeInit();
+      this.language.initTranslate();
       const device = await this.native.getDeviceInfo();
       const token = await this.tokenService.getToken();
       const userEmail = await this.store.selectSnapshot<any>((state: any) => state.authState?.userEmail);

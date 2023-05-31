@@ -6,7 +6,7 @@ import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { NavigationService } from '../../shared/services/navigation/navigation.service';
-import { Observable, Subject, take } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { StartFacade } from '../start-facade';
 import { CustomComponentsModule } from 'src/app/components/components.module';
 

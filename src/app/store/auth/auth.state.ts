@@ -34,7 +34,7 @@ export class AuthState implements OnDestroy {
     private tokenService = inject(TokenService);
     private navigation = inject(NavigationService);
     private medusa = inject(MedusaService);
-    
+
     subscription = new Subject();
 
     @Selector()
@@ -84,7 +84,6 @@ export class AuthState implements OnDestroy {
                     const error = throwError(() => new Error(JSON.stringify(err)));
                     return error;
                 }),
-
             ).subscribe((res: any) => {
                 if (res.exists) {
                     this.medusa.loginEmailPassword(email)
@@ -114,26 +113,32 @@ export class AuthState implements OnDestroy {
                             return error;
                         }),
                     ).subscribe((customer: any) => {
-                            this.store.dispatch(new AuthStateActions.LoadStrapiUser(user.user.id));
-                            return ctx.patchState({
-                                ...state,
-                                customer: customer.customer,
-                                isLoggedIn: true,
-                                userEmail: email,
-                            });
+                        this.store.dispatch(new AuthStateActions.LoadStrapiUser(user.user.id));
+                        return ctx.patchState({
+                            ...state,
+                            customer: customer.customer,
+                            isLoggedIn: true,
+                            userEmail: email,
                         });
+                    });
                 }
             });
     }
     @Action(AuthStateActions.GetSession)
     async getSession(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
-        this.medusa.getMedusaSession().subscribe((customer: any) => {
-            ctx.patchState({
-                ...state,
-                customer: customer.customer,
+        this.medusa.getMedusaSession()
+            .pipe(takeUntil(this.subscription),
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),)
+            .subscribe((customer: any) => {
+                ctx.patchState({
+                    ...state,
+                    customer: customer.customer,
+                });
             });
-        });
     }
     @Action(AuthStateActions.LoadStrapiUser)
     loadStrapiUser(ctx: StateContext<IAuthStateModel>, { userId }: AuthStateActions.LoadStrapiUser) {

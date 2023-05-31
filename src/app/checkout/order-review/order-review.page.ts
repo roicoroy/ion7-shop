@@ -1,14 +1,8 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
-import { IRegisterAddress } from 'src/app/shared/types/types.interfaces';
-import { Store } from '@ngxs/store';
-import { CustomerActions } from 'src/app/store/customer/customer.actions';
-import { AddressesActions } from 'src/app/store/addresses/addresses.actions';
-import { CartActions } from 'src/app/store/cart/cart.actions';
+import { IonicModule } from '@ionic/angular';
+import { Observable, Subject } from 'rxjs';
 import { NavigationService } from 'src/app/shared/services/navigation/navigation.service';
 import { IOrderReviewFacadeState, OrderReviewFacade } from './order-review.facade';
 
@@ -25,25 +19,21 @@ import { IOrderReviewFacadeState, OrderReviewFacade } from './order-review.facad
   ]
 })
 export class OrderReviewPage implements OnInit, OnDestroy {
-
-  private router = inject(Router);
   private facade = inject(OrderReviewFacade);
-  private store = inject(Store);
+
   private navigation = inject(NavigationService);
 
   private readonly ngUnsubscribe = new Subject();
 
   viewState$: Observable<IOrderReviewFacadeState>;
 
-  constructor() { }
-
   ngOnInit() {
     this.viewState$ = this.facade.viewState$;
-    this.viewState$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((vs) => {
-        console.log(vs);
-      });
+    // this.viewState$
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe((vs) => {
+    //     console.log(vs);
+    //   });
   }
   details() {
   }
