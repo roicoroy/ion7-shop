@@ -48,12 +48,12 @@ export class ProfileFacade {
             }))
         );
     }
-    appLogout() {
-        this.store.dispatch(new AuthStateActions.AuthStateLogout());
-    }
-    loadApp() {
-        this.store.dispatch(new AuthStateActions.LoadApp());
-    }
+    // appLogout() {
+    //     this.store.dispatch(new AuthStateActions.AuthStateLogout());
+    // }
+    // loadApp() {
+    //     this.store.dispatch(new AuthStateActions.LoadApp());
+    // }
     appUploadProfileImage(formData: FormData) {
         return this.store.dispatch(new UserProfileActions.UploadImage(formData))
     }

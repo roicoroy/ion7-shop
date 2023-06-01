@@ -5,19 +5,15 @@ import {
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import { Inject, Injectable, Injector, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
 import { catchError, mergeMap, Observable, take, throwError } from 'rxjs';
 
 import { TokenService } from '../services/token/token.service';
 import { IErrorRes } from '../types/responses/AuthError';
-import { StrapiAuthConfig } from '../types/StrapiAuthConfig';
-import { AuthStateService } from 'src/app/store/auth/auth-state.service';
 import { AuthStateActions } from 'src/app/store/auth/auth.actions';
 import { Store } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
 import { StorageService } from '../services/storage/ionstorage.service';
-import { request } from 'http';
 
 @Injectable({
   providedIn: 'root'
@@ -79,7 +75,6 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private addAuthenticationToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
-
     // If we do not have a token yet then we should not set the header.
     // Here we could first retrieve the token from where we store it.
     if (!token) {
@@ -116,7 +111,13 @@ export class AuthInterceptor implements HttpInterceptor {
     return request;
 }
 private medusaRequest(request: HttpRequest<any>) {
-    return request;
+  const clone: HttpRequest<any> = request.clone({
+      setHeaders: {
+          'Content-Type': 'application/json',
+      },
+      withCredentials: true
+  });
+  return clone;
 }
 }
 

@@ -39,12 +39,12 @@ export class OrdersPage implements OnInit {
 
   constructor() {
     this.viewState$ = this.facade.viewState$;
-    // this.viewState$.subscribe((vs) => {
-    //   console.log(vs);
-    // })
+    this.viewState$.subscribe((vs) => {
+      console.log(vs);
+    })
   }
   ngOnInit() {
-    this.store.dispatch(new AuthStateActions.GetSession());
+    // this.store.dispatch(new AuthStateActions.GetSession());
 
     this.presentingElement = document.querySelector('#main-content');
   }

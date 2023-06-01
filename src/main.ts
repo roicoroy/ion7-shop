@@ -38,6 +38,7 @@ import { ThemeState } from './app/store/theme/theme.state';
 import { UserProfileState } from './app/store/user-profile/user-profile.state';
 import "@angular/compiler";
 import { ErrorCatchingInterceptor } from './app/shared/interceptor/error.interceptor';
+import {CookieService} from 'ngx-cookie-service';
 
 registerLocaleData(localeEn, 'en');
 registerLocaleData(localePt, 'pt');
@@ -62,11 +63,11 @@ bootstrapApplication(AppComponent, {
     //   useClass: StrapiMedusaInterceptor,
     //   multi: true
     // },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorCatchingInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: ErrorCatchingInterceptor,
+    //   multi: true
+    // },
     importProvidersFrom(
       IonicModule.forRoot({}),
       HttpClientModule,
@@ -110,7 +111,8 @@ bootstrapApplication(AppComponent, {
           'shipping'
         ]
       }),
-      IonicStorageModule.forRoot()
+      IonicStorageModule.forRoot(),
+      CookieService
     ),
     provideRouter(routes),
   ],

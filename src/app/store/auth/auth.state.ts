@@ -72,8 +72,6 @@ export class AuthState implements OnDestroy {
     }
     @Action(AuthStateActions.SetAuthState)
     async setAuthState(ctx: StateContext<IAuthStateModel>, { user }: AuthStateActions.SetAuthState) {
-        // console.log(user);
-        const state = ctx.getState();
         const email = user.user.email;
         this.tokenService.setToken(user.jwt);
 
@@ -98,12 +96,12 @@ export class AuthState implements OnDestroy {
                         .subscribe((customer: any) => {
                             this.store.dispatch(new AuthStateActions.LoadStrapiUser(user.user.id));
                             return ctx.patchState({
-                                ...state,
                                 customer: customer.customer,
                                 isLoggedIn: true,
                                 userEmail: email,
                             });
                         });
+                    this.store.dispatch(new AuthStateActions.GetSession());
                 }
                 if (!res.exists) {
                     this.medusa.createMedusaCustomer(email).pipe(
@@ -115,12 +113,12 @@ export class AuthState implements OnDestroy {
                     ).subscribe((customer: any) => {
                         this.store.dispatch(new AuthStateActions.LoadStrapiUser(user.user.id));
                         return ctx.patchState({
-                            ...state,
                             customer: customer.customer,
                             isLoggedIn: true,
                             userEmail: email,
                         });
                     });
+                    this.store.dispatch(new AuthStateActions.GetSession());
                 }
             });
     }
@@ -135,7 +133,6 @@ export class AuthState implements OnDestroy {
                 }),)
             .subscribe((customer: any) => {
                 ctx.patchState({
-                    ...state,
                     customer: customer.customer,
                 });
             });
@@ -148,7 +145,7 @@ export class AuthState implements OnDestroy {
                 takeUntil(this.subscription),
             )
             .subscribe((user: IUser) => {
-                console.log(user);
+                // console.log(user);
                 return ctx.patchState({
                     ...state,
                     isLoggedIn: true,

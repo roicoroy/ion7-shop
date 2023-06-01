@@ -14,6 +14,7 @@ import { EmailPasswordActions } from "src/app/store/auth/email-password/email-pa
 import { EmailPasswordFacade, IEmailPasswordFacadeState } from "./email-password.facade";
 import { FormComponentsModule } from "src/app/form-components/form-components.module";
 import { UtilityService } from "src/app/shared/services/utility/utility.service";
+import { CookieService } from "ngx-cookie-service";
 
 @Component({
   selector: 'app-email-password',
@@ -48,6 +49,7 @@ export class EmailPasswordPage implements OnDestroy {
 
   private utility = inject(UtilityService);
   private facade = inject(EmailPasswordFacade);
+  private cookieService = inject(CookieService);
 
   private readonly ngUnsubscribe = new Subject();
 
@@ -59,7 +61,7 @@ export class EmailPasswordPage implements OnDestroy {
         if (vs.isLoggedIn) {
           await this.utility.presentLoading('...');
           setTimeout(async () => {
-            this.navigation.navControllerDefault('start/tabs/home');
+            // this.navigation.navControllerDefault('start/tabs/home');
             await this.utility.dismissLoading();
           }, 1000);
         }
@@ -69,6 +71,8 @@ export class EmailPasswordPage implements OnDestroy {
   ionViewDidEnter() {
     this.form?.loginForm.get('email').setValue("roicoroy@yahoo.com.br");
     this.form?.loginForm.get('password').setValue("Rwbento123!");
+    const all_cookies = this.cookieService.getAll();
+    console.log(all_cookies );
   }
 
   login() {
