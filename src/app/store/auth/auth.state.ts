@@ -4,10 +4,11 @@ import { AuthStateActions } from './auth.actions';
 import { TokenService } from 'src/app/shared/services/token/token.service';
 import { AuthStateService } from './auth-state.service';
 import { StateClear } from 'ngxs-reset-plugin';
-import { Subject, catchError, takeUntil, throwError } from 'rxjs';
+import { Subject, catchError, takeUntil, tap, throwError } from 'rxjs';
 import { IUser } from 'src/app/shared/types/models/User';
 import { NavigationService } from 'src/app/shared/services/navigation/navigation.service';
 import { MedusaService } from 'src/app/shared/services/api/medusa.service';
+import { StrapiService } from 'src/app/shared/services/api/strapi.service';
 
 export class IAuthStateModel {
     isLoggedIn: boolean;
@@ -30,7 +31,7 @@ export class IAuthStateModel {
 export class AuthState implements OnDestroy {
 
     private store = inject(Store);
-    private authService = inject(AuthStateService);
+    private strapi = inject(StrapiService);
     private tokenService = inject(TokenService);
     private navigation = inject(NavigationService);
     private medusa = inject(MedusaService);
@@ -61,20 +62,26 @@ export class AuthState implements OnDestroy {
     async loadApp(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
         this.store.dispatch(new AuthStateActions.GetSession());
+<<<<<<< HEAD
         if (!state.customer) {
             this.store.dispatch(new AuthStateActions.GetSession());
             // console.log('get session');
         }
+=======
+        // if (!state.customer) {
+        //     this.store.dispatch(new AuthStateActions.GetSession());
+        //     console.log('get session');
+        // }
+>>>>>>> c23d452 (updates)
         if (!state.user && !state.customer) {
             this.store.dispatch(new AuthStateActions.AuthStateLogout());
-            // console.log('auth logout');
+            console.log('auth logout');
         }
     }
     @Action(AuthStateActions.SetAuthState)
     async setAuthState(ctx: StateContext<IAuthStateModel>, { user }: AuthStateActions.SetAuthState) {
         const email = user.user.email;
         this.tokenService.setToken(user.jwt);
-
         this.medusa.medusaExistsHttp(email)
             .pipe(
                 takeUntil(this.subscription),
@@ -94,13 +101,8 @@ export class AuthState implements OnDestroy {
                         )
                         .subscribe((customer: any) => {
                             this.store.dispatch(new AuthStateActions.LoadStrapiUser(user.user.id));
-                            return ctx.patchState({
-                                customer: customer.customer,
-                                isLoggedIn: true,
-                                userEmail: email,
-                            });
+                            this.store.dispatch(new AuthStateActions.GetSession());
                         });
-                    this.store.dispatch(new AuthStateActions.GetSession());
                 }
                 if (!res.exists) {
                     this.medusa.createMedusaCustomer(email).pipe(
@@ -111,40 +113,52 @@ export class AuthState implements OnDestroy {
                         }),
                     ).subscribe((customer: any) => {
                         this.store.dispatch(new AuthStateActions.LoadStrapiUser(user.user.id));
-                        return ctx.patchState({
-                            customer: customer.customer,
-                            isLoggedIn: true,
-                            userEmail: email,
-                        });
+                        this.store.dispatch(new AuthStateActions.GetSession());
                     });
-                    this.store.dispatch(new AuthStateActions.GetSession());
                 }
             });
     }
     @Action(AuthStateActions.GetSession)
     async getSession(ctx: StateContext<IAuthStateModel>) {
-        const state = ctx.getState();
         this.medusa.getMedusaSession()
-            .pipe(takeUntil(this.subscription),
+            .pipe(
+                takeUntil(this.subscription),
                 catchError(err => {
                     const error = throwError(() => new Error(JSON.stringify(err)));
                     return error;
-                }),)
+                }),
+            )
             .subscribe((customer: any) => {
                 ctx.patchState({
+                    isLoggedIn: true,
                     customer: customer.customer,
                 });
             });
+        // this.medusa.retrieveMedusaCustomer()
+        //     .pipe(takeUntil(this.subscription),
+        //         catchError(err => {
+        //             const error = throwError(() => new Error(JSON.stringify(err)));
+        //             return error;
+        //         }),)
+        //     .subscribe((customer: any) => {
+        //         console.log('retrieve cus', customer.customer);
+        //         ctx.patchState({
+        //             customer: customer.customer,
+        //         });
+        //     });
     }
     @Action(AuthStateActions.LoadStrapiUser)
     loadStrapiUser(ctx: StateContext<IAuthStateModel>, { userId }: AuthStateActions.LoadStrapiUser) {
         const state = ctx.getState();
-        this.authService.loadUser(userId)
+        this.strapi.loadUser(userId)
             .pipe(
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),
                 takeUntil(this.subscription),
             )
-            .subscribe((user: IUser) => {
-                // console.log(user);
+            .subscribe((user: any) => {
                 return ctx.patchState({
                     ...state,
                     isLoggedIn: true,
@@ -154,23 +168,16 @@ export class AuthState implements OnDestroy {
             });
     }
 
-    // @Action(AuthStateActions.GetToken)
-    // async getToken(ctx: StateContext<IAuthStateModel>) {
-    //     const state = ctx.getState();
-    //     ctx.patchState({
-    //         ...state,
-    //         token: token
-    //     });
-    // }
-
     @Action(AuthStateActions.SetToken)
     async setToken(ctx: StateContext<IAuthStateModel>, { token }: AuthStateActions.SetToken) {
+<<<<<<< HEAD
         const state = ctx.getState();
 
         // console.log(token);
 
+=======
+>>>>>>> c23d452 (updates)
         ctx.patchState({
-            ...state,
             token: token
         });
     }
@@ -186,7 +193,7 @@ export class AuthState implements OnDestroy {
 
     @Action(AuthStateActions.AuthStateLogout)
     authStateLogout(ctx: StateContext<IAuthStateModel>, { }: AuthStateActions.AuthStateLogout) {
-        this.authService.medusaLogout();
+        this.medusa.medusaLogout();
         this.tokenService.deleteToken();
         this.store.dispatch(new StateClear());
         this.navigation.navControllerDefault('/start/tabs/home');

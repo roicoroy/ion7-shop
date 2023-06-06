@@ -97,10 +97,7 @@ export class UserPage {
     });
     this.viewState$
       .subscribe((vs) => {
-        
-        console.log(vs);
-
-        if (vs?.user != null) {
+        if (vs.user != null) {
           this.userForm.get('username').setValue(vs.user.username);
           this.userForm.get('email').setValue(vs.user.email);
           this.userForm.get('first_name').setValue(vs.user.first_name);

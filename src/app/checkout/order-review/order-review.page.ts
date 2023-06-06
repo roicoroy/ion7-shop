@@ -37,7 +37,7 @@ export class OrderReviewPage implements OnInit, OnDestroy {
   }
   details() {
   }
-  next() {
+  finish() {
     this.navigation.navControllerDefault('checkout/pages/checkout-home');
   }
   back() {

@@ -36,9 +36,10 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
                     catchError((response: HttpErrorResponse) => throwError(() => new HttpErrorResponse(response)))
                 );
         }
-        return request;
+        return next.handle(request) || null;
     }
     private addToken(request: HttpRequest<any>, token: any) {
+        // console.log('medusa', request);
         if (token) {
             const clone: HttpRequest<any> = request.clone({
                 headers: new HttpHeaders({
@@ -50,6 +51,7 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
         return request;
     }
     private medusaRequest(request: HttpRequest<any>) {
+        // console.log('medusa', request.url);
         const clone: HttpRequest<any> = request.clone({
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',

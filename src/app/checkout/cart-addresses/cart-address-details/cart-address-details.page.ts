@@ -181,7 +181,7 @@ export class AddressDetailsPage implements OnInit, OnDestroy {
     };
     if (this.cartAdressDetailsForm.valid) {
       this.store.dispatch(new CustomerActions.AddAShippingAddress(address));
-      this.navigation.navControllerDefault('addresses');
+      this.navigation.navControllerDefault('checkout/pages/cart-addresses');
     }
   }
   onRegionCodeChange(regionId?: string) {

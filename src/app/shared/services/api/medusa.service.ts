@@ -7,8 +7,8 @@ import { ICustomerLoginData, ICustomerRegisterData } from '../../types/types.int
     providedIn: 'root'
 })
 export class MedusaService {
-    // medusa: any;
-    headers = new HttpHeaders().set('Content-Type', 'application/json');
+    headers = new HttpHeaders().set('Content-Type', 'application/json')
+        .set('Access-Control-Allow-Origin', '*');
     httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json',
@@ -17,8 +17,6 @@ export class MedusaService {
     };
     private http = inject(HttpClient);
 
-    constructor() {
-    }
     medusaExistsHttp(email: string) {
         return this.http.get(environment.MEDUSA_API_BASE_PATH + '/store/auth/' + email, this.httpOptions);
     }
@@ -27,7 +25,6 @@ export class MedusaService {
             email: email,
             password: email,
         };
-        // console.log(loginReq);
         return this.http.post(environment.MEDUSA_API_BASE_PATH + '/store/auth/', loginReq, this.httpOptions);
     }
     createMedusaCustomer(email: string) {
@@ -144,5 +141,8 @@ export class MedusaService {
     deleteAddress(addressId: string) {
         const url = `${environment.MEDUSA_API_BASE_PATH}/store/customers/me/addresses${addressId}`;
         return this.http.delete(url);
+    }
+    medusaLogout() {
+        return this.http.delete(environment.MEDUSA_API_BASE_PATH + '/store/auth', this.httpOptions);
     }
 }

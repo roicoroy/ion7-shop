@@ -19,20 +19,20 @@ import { Role } from './Role';
 
 
 export interface IStrapiUser {
-  jwt: string,
-  user: {
+  jwt?: string,
+  user?: {
     id: string,
     username: string,
     email: string,
-    provider: string,
-    confirmed: boolean,
-    blocked: boolean,
-    first_name: string,
-    last_name: string,
-    device_token: string,
-    accepted_fcm: string,
-    createdAt: Date,
-    updatedAt: Date,
+    provider?: string,
+    confirmed?: boolean,
+    blocked?: boolean,
+    first_name?: string,
+    last_name?: string,
+    device_token?: string,
+    accepted_fcm?: string,
+    createdAt?: Date,
+    updatedAt?: Date,
   }
 }
 /**

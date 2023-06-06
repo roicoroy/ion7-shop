@@ -42,6 +42,9 @@ export class CheckoutHomePage implements OnDestroy {
   loginPages() {
     this.navigation.navControllerDefault('/auth/pages/auth-home');
   }
+  homePage() {
+    this.navigation.navControllerDefault('/start/tabs/home');
+  }
   cartAddresses() {
     this.navigation.navControllerDefault('/checkout/pages/cart-addresses');
   }

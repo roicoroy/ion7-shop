@@ -169,6 +169,7 @@ export class StrapiService {
     public loadUser(userId: any) {
         return this.httpClient.get(environment.BASE_PATH + '/api/users/' + userId + '?populate=*', { headers: this.headers })
     }
+    
 
     private async updateUser(updateReq: any): Promise<IUser | HttpErrorResponse> {
         try {

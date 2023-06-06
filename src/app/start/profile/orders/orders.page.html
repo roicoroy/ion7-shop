@@ -12,7 +12,7 @@
 </ion-header>
 
 
-<ion-content [fullscreen]="true" class="ion-padding" *ngIf="viewState$ | async as vs">
+<ion-content [fullscreen]="true" class="ion-padding">
     <ion-header collapse="condense">
         <ion-toolbar>
             <ion-title size="large">
@@ -20,7 +20,7 @@
             </ion-title>
         </ion-toolbar>
     </ion-header>
-    <ion-grid>
+    <ion-grid *ngIf="viewState$ | async as vs">
         <ion-row *ngIf="vs.isLoggedIn; else loggedOut">
             <ion-col size="12">
                 <ion-list>

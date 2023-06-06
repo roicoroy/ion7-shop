@@ -60,7 +60,12 @@ export class EmailPasswordPage implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(async (vs) => {
         if (vs.isLoggedIn) {
-          this.navigation.navControllerDefault(AppRoutePath.START_HOME);
+          // console.log(vs);
+          await this.utility.presentLoading('...');
+          setTimeout(async () => {
+            this.navigation.navControllerDefault('start/tabs/home');
+            await this.utility.dismissLoading();
+          }, 1000);
         }
       });
   }

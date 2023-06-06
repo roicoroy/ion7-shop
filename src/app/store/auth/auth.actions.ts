@@ -1,6 +1,4 @@
-import { IStrapiUser, IUser } from "src/app/shared/types/models/User";
-import { IResAuthLogin } from "src/app/shared/types/responses/ResAuthLogin";
-import { IResAuthRegister } from "src/app/shared/types/responses/ResAuthRegister";
+import { IStrapiUser } from "src/app/shared/types/models/User";
 
 export namespace AuthStateActions {
     export class LoadApp {
@@ -18,9 +16,6 @@ export namespace AuthStateActions {
         static readonly type = '[AuthStateActions] Load Strapi User';
         constructor(public userId: string) { }
     }
-    // export class GetToken {
-    //     static readonly type = '[AuthStateActions] Get Token';
-    // }
     export class SetToken {
         static readonly type = '[AuthStateActions] Set Token';
         constructor(public token: string) { }

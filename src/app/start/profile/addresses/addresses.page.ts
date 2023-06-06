@@ -9,6 +9,7 @@ import { AddressesFacade, IAddressesFacadeState } from './address.facade';
 import { Store } from '@ngxs/store';
 import { CustomerActions } from 'src/app/store/customer/customer.actions';
 import { AddressesActions } from 'src/app/store/addresses/addresses.actions';
+import { NavigationService } from 'src/app/shared/services/navigation/navigation.service';
 
 @Component({
   selector: 'app-addresses',
@@ -27,6 +28,7 @@ export class AddressesPage implements OnInit, OnDestroy {
   private router = inject(Router);
   private facade = inject(AddressesFacade);
   private store = inject(Store);
+  private navigation = inject(NavigationService);
 
   private readonly ngUnsubscribe = new Subject();
 
@@ -43,6 +45,9 @@ export class AddressesPage implements OnInit, OnDestroy {
     //     console.log(vs);
     //     console.log(vs.customer?.shipping_addresses);
     //   });
+  }
+  homePage() {
+    this.navigation.navControllerDefault('/start/tabs/home');
   }
   addAddress() {
     this.router.navigate(['address-details'], { queryParams: { address: null } });

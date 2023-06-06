@@ -9,6 +9,7 @@ import { MedusaService } from 'src/app/shared/services/api/medusa.service';
 import { catchError, switchMap, tap, throwError } from 'rxjs';
 import { AuthStateActions } from '../auth.actions';
 import { StrapiService } from 'src/app/shared/services/api/strapi.service';
+import { IStrapiUser } from 'src/app/shared/types/models/User';
 
 export class IEmailPasswordStateModel { }
 
@@ -28,7 +29,16 @@ export class EmailPasswordState {
 
     @Action(EmailPasswordActions.LoginEmailPassword)
     loginEmailPassword(ctx: StateContext<any>, { email, password }: EmailPasswordActions.LoginEmailPassword): any {
-        this.strapi.login(email, password)
+        // const req: IStrapiUser = {
+        //     jwt: '123',
+        //     user: {
+        //         email: 'roicoroy@yahoo.com.br',
+        //         username: 'roicoroy',
+        //         id: '1'
+        //     }
+        // }
+        // this.store.dispatch(new AuthStateActions.SetAuthState(req));
+        this.emailPasswordService.loginEmailPassword(email, password)
             .pipe(
                 tap((user: any) => {
                     return this.store.dispatch(new AuthStateActions.SetAuthState(user));
