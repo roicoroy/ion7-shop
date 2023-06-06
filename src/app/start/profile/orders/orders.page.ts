@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ProfileFacade } from '../profile.facade';
-import { AuthStateActions } from 'src/app/store/auth/auth.actions';
 
 @Component({
   selector: 'app-orders',
@@ -39,13 +38,12 @@ export class OrdersPage implements OnInit {
 
   constructor() {
     this.viewState$ = this.facade.viewState$;
-    this.viewState$.subscribe((vs) => {
-      console.log(vs);
-    })
+    // this.viewState$.subscribe((vs) => {
+    //   console.log(vs);
+    // });
   }
   ngOnInit() {
     // this.store.dispatch(new AuthStateActions.GetSession());
-
     this.presentingElement = document.querySelector('#main-content');
   }
   back() {

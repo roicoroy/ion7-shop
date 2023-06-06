@@ -35,12 +35,12 @@ import { KeypadModule } from 'src/app/shared/services/native/keyboard/keypad.mod
 })
 export class RegisterPage implements OnInit {
 
-  // private facade = inject(HomePageFacade);
-  // private facade = inject(HomePageFacade);
-
   registerReq: IReqAuthRegister;
-  private store = inject(Store);
 
+  private store = inject(Store);
+  
+  public error: IErrorRes;
+  
   public registerForm: UntypedFormGroup = new UntypedFormGroup({
     first_name: new UntypedFormControl('', [Validators.required]),
     last_name: new UntypedFormControl('', [Validators.required]),
@@ -56,10 +56,6 @@ export class RegisterPage implements OnInit {
       validators: [Validation.match('password', 'passwordConfirmation')]
     }
   );
-
-  public error: IErrorRes;
-
-  constructor() { }
 
   ngOnInit() {
   }

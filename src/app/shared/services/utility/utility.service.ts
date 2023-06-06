@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
 import { AlertController, LoadingController, PopoverController, ToastController } from '@ionic/angular';
-import { Store } from '@ngxs/store';
-// import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -53,9 +49,7 @@ export class UtilityService {
   async dismissLoading() {
     this.isLoading = false;
     if (this.loadingCtrl) {
-      return await this.loadingCtrl.dismiss().then(resp => {
-        // console.log(' :>> Loading dismiss');
-      });
+      return await this.loadingCtrl.dismiss();
     }
   }
 

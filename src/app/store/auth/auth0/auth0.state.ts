@@ -32,6 +32,8 @@ export class Auth0State {
                 if (user) {
                     this.store.dispatch(new AuthStateActions.SetAuthState(user));
                     this.utility.dismissLoading();
+                } else {
+                    this.utility.dismissLoading();
                 }
             });
     }

@@ -12,7 +12,6 @@ import { VariantModalPage } from './variant-modal/variant-modal.page';
 import { CustomComponentsModule } from 'src/app/components/components.module';
 import { IShopFacadeState, ShopFacade } from '../shop.facade';
 import { ProductsActions } from 'src/app/store/products/products.actions';
-import { AddressesActions } from 'src/app/store/addresses/addresses.actions';
 import { Router } from '@angular/router';
 
 @Component({

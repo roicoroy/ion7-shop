@@ -63,7 +63,7 @@ export class AuthState implements OnDestroy {
         this.store.dispatch(new AuthStateActions.GetSession());
         if (!state.customer) {
             this.store.dispatch(new AuthStateActions.GetSession());
-            console.log('get session');
+            // console.log('get session');
         }
         if (!state.user && !state.customer) {
             this.store.dispatch(new AuthStateActions.AuthStateLogout());
@@ -91,7 +91,6 @@ export class AuthState implements OnDestroy {
                                 const error = throwError(() => new Error(JSON.stringify(err)));
                                 return error;
                             }),
-
                         )
                         .subscribe((customer: any) => {
                             this.store.dispatch(new AuthStateActions.LoadStrapiUser(user.user.id));
@@ -125,9 +124,6 @@ export class AuthState implements OnDestroy {
     @Action(AuthStateActions.GetSession)
     async getSession(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
-
-        console.log(state);
-
         this.medusa.getMedusaSession()
             .pipe(takeUntil(this.subscription),
                 catchError(err => {
@@ -135,9 +131,6 @@ export class AuthState implements OnDestroy {
                     return error;
                 }),)
             .subscribe((customer: any) => {
-
-                console.log(customer);
-
                 ctx.patchState({
                     customer: customer.customer,
                 });
@@ -174,7 +167,7 @@ export class AuthState implements OnDestroy {
     async setToken(ctx: StateContext<IAuthStateModel>, { token }: AuthStateActions.SetToken) {
         const state = ctx.getState();
 
-        console.log(token);
+        // console.log(token);
 
         ctx.patchState({
             ...state,
