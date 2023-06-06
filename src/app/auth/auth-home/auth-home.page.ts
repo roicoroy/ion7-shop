@@ -27,19 +27,10 @@ export class AuthHomePage {
 
   private navigation = inject(NavigationService);
 
-  // public environmentInjector = inject(EnvironmentInjector);
-
   navigateAuth0Callback() {
     this.navigation.navControllerDefault('auth/pages/strapi-auth0');
   }
   loginEmailPassword() {
     this.navigation.navControllerDefault('auth/pages/email/flow/email-password');
   }
-
-  // loginPasswordless() {
-  //   this.navigation.navControllerDefault('auth/passwordless');
-  // }
-  // home() {
-  //   this.navigation.navControllerDefault('shop/tabs/home');
-  // }
 }

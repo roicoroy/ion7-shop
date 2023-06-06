@@ -9,6 +9,7 @@ import { NavigationService } from '../../shared/services/navigation/navigation.s
 import { Observable, Subject } from 'rxjs';
 import { StartFacade } from '../start-facade';
 import { CustomComponentsModule } from 'src/app/components/components.module';
+import { AppRoutePath } from 'src/app/app.routers.model';
 
 @Component({
   selector: 'app-home',
@@ -47,10 +48,10 @@ export class HomePage implements OnDestroy {
     }, 3000);
   }
   loginPages() {
-    this.navigation.navControllerDefault('/auth/pages/auth-home');
+    this.navigation.navControllerDefault(AppRoutePath.AUTH_HOME);
   }
   shop() {
-    this.navigation.navControllerDefault('/shop/tabs/products-list');
+    this.navigation.navControllerDefault(AppRoutePath.SHOP_PRODUCTS_LIST);
   }
   logout() {
     this.facade.appLogout();

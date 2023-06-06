@@ -125,6 +125,9 @@ export class AuthState implements OnDestroy {
     @Action(AuthStateActions.GetSession)
     async getSession(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
+
+        console.log(state);
+
         this.medusa.getMedusaSession()
             .pipe(takeUntil(this.subscription),
                 catchError(err => {
@@ -132,6 +135,9 @@ export class AuthState implements OnDestroy {
                     return error;
                 }),)
             .subscribe((customer: any) => {
+
+                console.log(customer);
+
                 ctx.patchState({
                     customer: customer.customer,
                 });

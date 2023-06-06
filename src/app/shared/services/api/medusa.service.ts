@@ -38,7 +38,7 @@ export class MedusaService {
         return this.http.post(environment.MEDUSA_API_BASE_PATH + '/store/customers/', registerRequest, this.httpOptions);
     }
     getMedusaSession() {
-        return this.http.get(environment.MEDUSA_API_BASE_PATH + '/store/auth/', this.httpOptions);
+        return this.http.get(environment.MEDUSA_API_BASE_PATH + '/store/auth/');
     }
     retrieveMedusaCustomer() {
         return this.http.get(environment.MEDUSA_API_BASE_PATH + '/store/customers/me', this.httpOptions);

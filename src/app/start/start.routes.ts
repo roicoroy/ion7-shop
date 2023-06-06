@@ -6,6 +6,7 @@ export const routes: Routes = [
   {
     path: 'tabs',
     component: StartPage,
+    resolve: { StartResolver },
     children: [
       {
         path: 'home',
@@ -21,7 +22,6 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
     ],
-    resolve: { StartResolver }
   },
   {
     path: '',

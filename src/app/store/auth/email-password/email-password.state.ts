@@ -28,7 +28,7 @@ export class EmailPasswordState {
 
     @Action(EmailPasswordActions.LoginEmailPassword)
     loginEmailPassword(ctx: StateContext<any>, { email, password }: EmailPasswordActions.LoginEmailPassword): any {
-        this.emailPasswordService.loginEmailPassword(email, password)
+        this.strapi.login(email, password)
             .pipe(
                 tap((user: any) => {
                     return this.store.dispatch(new AuthStateActions.SetAuthState(user));
@@ -37,8 +37,8 @@ export class EmailPasswordState {
                     return throwError(() => new Error(JSON.stringify(err)));
                 }),
             )
-            .subscribe((user: any) => {
-                // console.log(user);
+            .subscribe((res: any) => {
+                console.log(res);
                 // // this.store.dispatch(new AuthStateActions.SetAuthState(user));
                 // // if (user.jwt && user.user) {
                 // //     // this.store.dispatch(new AuthStateActions.SetToken(user.jwt));
@@ -50,6 +50,10 @@ export class EmailPasswordState {
     @Action(EmailPasswordActions.RegisterUser)
     async registerUser(ctx: StateContext<any>, { registerForm }: EmailPasswordActions.RegisterUser) {
         console.log(registerForm);
+        this.emailPasswordService.registerEmailPassword(registerForm.email, registerForm.password)
+            .subscribe((res: any) => {
+                console.log(res);
+            });
     }
     @Action(EmailPasswordActions.ForgotPassword)
     async forgotPassword(ctx: StateContext<any>, { email }: EmailPasswordActions.ForgotPassword) {

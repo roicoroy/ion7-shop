@@ -9,12 +9,12 @@ import { environment } from "src/environments/environment";
 export class EmailPasswordService {
 
     headers = new HttpHeaders().set('Content-Type', 'application/json');
-    // httpOptions = {
-    //     headers: new HttpHeaders({
-    //         'Content-Type': 'application/json',
-    //     }),
-    //     withCredentials: true,
-    // };
+    httpOptions = {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+        }),
+        withCredentials: true,
+    };
     private http = inject(HttpClient);
 
     loginEmailPassword(email: string, password?: string) {

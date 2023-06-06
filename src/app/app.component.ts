@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { IonicModule, MenuController, Platform } from '@ionic/angular';
@@ -19,6 +19,7 @@ import { ProductsActions } from './store/products/products.actions';
 import { ThemeService } from './store/theme/theme.service';
 import { KeyboardService } from './shared/services/native/keyboard/keyboard.service';
 import { LanguageService } from './shared/services/language/language.service';
+import { AppRoutePath } from './app.routers.model';
 
 @Component({
   selector: 'app-root',
@@ -54,11 +55,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private facade = inject(AppFacade);
   private menu = inject(MenuController);
   private navigation = inject(NavigationService);
-  
+
   private keyboardService = inject(KeyboardService);
-  
+
   private language = inject(LanguageService);
-  
+
   private readonly ngUnsubscribe = new Subject();
 
   viewState$: Observable<IAppFacadeState>;
@@ -98,10 +99,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.store.dispatch(new AuthStateActions.AuthStateLogout());
   }
   homePage(): void {
-    this.navigation.navControllerDefault('/start/tabs/home')
+    this.navigation.navControllerDefault(AppRoutePath.START_HOME);
   }
   loginPage(): void {
-    this.navigation.navControllerDefault('/auth/pages/auth-home')
+    this.navigation.navControllerDefault(AppRoutePath.AUTH_HOME);
   }
   ngOnDestroy(): void {
     this.ngUnsubscribe.next(null);

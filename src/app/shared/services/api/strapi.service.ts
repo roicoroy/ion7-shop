@@ -19,7 +19,9 @@ import { Browser } from '@capacitor/browser';
 export class StrapiService {
     private user: IUser;
     private token: string;
-    headers = new HttpHeaders().set('Content-Type', 'application/json');
+    headers = new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .append('Accept', 'application/json, */*');
     formHeaders = new HttpHeaders();
 
     strapiUser: any;
@@ -53,7 +55,10 @@ export class StrapiService {
             identifier: email,
             password
         }
-        this.httpClient.post<any>(environment.BASE_PATH + '/api/auth/local', data, { headers: this.headers });
+
+        console.log(data);
+
+        return this.httpClient.post<any>(environment.BASE_PATH + '/api/auth/local', data, { headers: this.headers });
         // return this.httpClient.post(environment.BASE_PATH + '/api/auth/local', data, { headers: this.headers });
     }
 

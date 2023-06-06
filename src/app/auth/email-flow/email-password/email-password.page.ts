@@ -15,6 +15,7 @@ import { EmailPasswordFacade, IEmailPasswordFacadeState } from "./email-password
 import { FormComponentsModule } from "src/app/form-components/form-components.module";
 import { UtilityService } from "src/app/shared/services/utility/utility.service";
 import { CookieService } from "ngx-cookie-service";
+import { AppRoutePath } from "src/app/app.routers.model";
 
 @Component({
   selector: 'app-email-password',
@@ -43,12 +44,12 @@ export class EmailPasswordPage implements OnDestroy {
 
   viewState$: Observable<IEmailPasswordFacadeState>;
 
-  private platform = inject(Platform);
-  private store = inject(Store);
   private navigation = inject(NavigationService);
 
   private utility = inject(UtilityService);
+  
   private facade = inject(EmailPasswordFacade);
+
   private cookieService = inject(CookieService);
 
   private readonly ngUnsubscribe = new Subject();
@@ -59,34 +60,25 @@ export class EmailPasswordPage implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(async (vs) => {
         if (vs.isLoggedIn) {
-          await this.utility.presentLoading('...');
-          setTimeout(async () => {
-            // this.navigation.navControllerDefault('start/tabs/home');
-            await this.utility.dismissLoading();
-          }, 1000);
+          this.navigation.navControllerDefault(AppRoutePath.START_HOME);
         }
       });
   }
 
   ionViewDidEnter() {
-    this.form?.loginForm.get('email').setValue("roicoroy@yahoo.com.br");
+    // this.form?.loginForm.get('email').setValue("roicoroy@yahoo.com.br");
+    this.form?.loginForm.get('email').setValue("test@test.com");
     this.form?.loginForm.get('password').setValue("Rwbento123!");
-    const all_cookies = this.cookieService.getAll();
-    console.log(all_cookies );
   }
 
-  login() {
-    this.store.dispatch(new EmailPasswordActions.LoginEmailPassword(this.form?.loginForm.get('email').value, this.form?.loginForm.get('password').value));
+  login(): Observable<void> {
+    return this.facade.loginWithEmail(this.form?.loginForm.get('email').value, this.form?.loginForm.get('password').value);
   }
-  forgotPassowordPage(): void {
-    this.navigation.navControllerDefault('auth/pages/email/flow/forgot-password');
+  forgotPasswordPage(): void {
+    this.navigation.navControllerDefault(AppRoutePath.AUTH_FORGOT_PASSWORD);
   }
   registerPage(): void {
-    this.navigation.navControllerDefault('/auth/pages/email/flow/register');
-  }
-  getBackButtonText() {
-    const isIos = this.platform.is('ios')
-    return isIos ? 'Inbox' : '';
+    this.navigation.navControllerDefault(AppRoutePath.AUTH_REGISTER);
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next(null);
