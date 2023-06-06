@@ -1,4 +1,7 @@
 export namespace ShippingActions {
+    export class ClearPaymentSession {
+        static readonly type = '[ShippingActions] Clear Payment Session';
+    }
     export class GetShippingOptions {
         static readonly type = '[ShippingActions] Shipping Get Shipping Options';
     }

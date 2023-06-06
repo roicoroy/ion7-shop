@@ -15,6 +15,8 @@ import { UtilityService } from 'src/app/shared/services/utility/utility.service'
 import { CartActions } from 'src/app/store/cart/cart.actions';
 import { AuthStateActions } from 'src/app/store/auth/auth.actions';
 import { AddressesActions } from 'src/app/store/addresses/addresses.actions';
+import { ShippingActions } from 'src/app/store/shipping/shipping.actions';
+import { AppRoutePath } from 'src/app/app.routers.model';
 
 @Component({
   selector: 'app-payment',
@@ -54,13 +56,13 @@ export class PaymentPage implements OnDestroy {
 
   constructor() {
     this.viewState$ = this.facade.viewState$;
-    this.viewState$
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-      )
-      .subscribe((vs) => {
-        console.log(vs);
-      });
+    // this.viewState$
+    //   .pipe(
+    //     takeUntil(this.ngUnsubscribe),
+    //   )
+    //   .subscribe((vs) => {
+    //     console.log(vs);
+    //   });
   }
   loginPages() {
     this.navigation.navControllerDefault('/auth/pages/auth-home');
@@ -80,53 +82,41 @@ export class PaymentPage implements OnDestroy {
   logout() {
   }
   async confirm() {
-
     const cartId = await this.store.selectSnapshot<any>((state: any) => state.cart.cart?.id);
-
     const confirmPaymentData: ConfirmPaymentData = {
       return_url: 'http://localhost:8100/checkout/pages/order-review',
     }
-
     this.utility.presentLoading('...');
-
+    
     return this.stripeService.confirmPayment({
       elements: this.paymentElement?.elements,
       // confirmParams: confirmPaymentData,
       redirect: 'if_required'
     }).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(async (result: any) => {
-        console.log(result);
-
+        // console.log(result.paymentIntent);
         if (result.error) {
           this.utility.dismissLoading();
-
           this.utility.showToast(result.error?.message, 'middle', 1500);
         }
         if (!result.error) {
-
           this.store.dispatch(new AuthStateActions.GetSession());
-
-          setTimeout(() => {
-            this.store.dispatch(new CartActions.CompleteCart(cartId))
-              .pipe(takeUntil(this.ngUnsubscribe))
-              .subscribe(async (cartState: any) => {
-                console.log(cartState);
-                this.navigateToReview();
-              });
-          }, 200);
-          this.store.dispatch(new CartActions.LogOut());
-          this.store.dispatch(new AddressesActions.LogOut());
-          this.store.dispatch(new CartActions.ClearIsGuest());
-          this.utility.dismissLoading()
-          // .then(() => this.navigateToReview());
+          this.store.dispatch(new CartActions.CompleteCart(cartId))
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe(async (cartState: any) => {
+              this.navigateToReview();
+              this.store.dispatch(new CartActions.LogOut());
+              this.store.dispatch(new ShippingActions.LogOut());
+              this.utility.dismissLoading();
+            });
         }
       });
   }
   navigateToReview() {
     this.navigation.navigateFlip('/checkout/pages/order-review');
   }
-  back() {
-    this.navigation.navigateFlip('checkout/flow/shipping');
+  shoppingPage() {
+    this.navigation.navigateFlip(AppRoutePath.START_HOME);
   }
   ngOnDestroy(): void {
     this.ngUnsubscribe.next(null);

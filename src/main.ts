@@ -63,11 +63,11 @@ bootstrapApplication(AppComponent, {
       useClass: StrapiMedusaInterceptor,
       multi: true
     },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: ErrorCatchingInterceptor,
-    //   multi: true
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorCatchingInterceptor,
+      multi: true
+    },
     importProvidersFrom(
       IonicModule.forRoot({}),
       HttpClientModule,

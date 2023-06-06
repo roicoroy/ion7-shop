@@ -29,14 +29,12 @@ export class UserProfileState implements OnDestroy {
     @Action(UserProfileActions.UpdateFcmAccepted)
     updateFcmAccepted(ctx: StateContext<UserProfileModel>, action: UserProfileActions.UpdateFcmAccepted): void {
         const state = ctx.getState();
-        // console.log(state);
         const userId = this.store.selectSnapshot<any>((state: any) => state.authState?.userId);
         this.service.updateStrapiUserFcm(userId, action.fcmAccepted, '123')
             .pipe(
                 takeUntil(this.subscription),
             )
             .subscribe((user) => {
-                console.log(user);
                 this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
                 ctx.patchState({
                     ...state,
@@ -69,7 +67,6 @@ export class UserProfileState implements OnDestroy {
                         takeUntil(this.subscription),
                     )
                     .subscribe((user: any) => {
-                        console.log(user);
                         this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
                     });;
             });

@@ -2,7 +2,6 @@ import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { AuthStateActions } from './auth.actions';
 import { TokenService } from 'src/app/shared/services/token/token.service';
-import { AuthStateService } from './auth-state.service';
 import { StateClear } from 'ngxs-reset-plugin';
 import { Subject, catchError, takeUntil, tap, throwError } from 'rxjs';
 import { IUser } from 'src/app/shared/types/models/User';
@@ -61,21 +60,13 @@ export class AuthState implements OnDestroy {
     @Action(AuthStateActions.LoadApp)
     async loadApp(ctx: StateContext<IAuthStateModel>) {
         const state = ctx.getState();
-        this.store.dispatch(new AuthStateActions.GetSession());
-<<<<<<< HEAD
         if (!state.customer) {
             this.store.dispatch(new AuthStateActions.GetSession());
             // console.log('get session');
         }
-=======
-        // if (!state.customer) {
-        //     this.store.dispatch(new AuthStateActions.GetSession());
-        //     console.log('get session');
-        // }
->>>>>>> c23d452 (updates)
         if (!state.user && !state.customer) {
             this.store.dispatch(new AuthStateActions.AuthStateLogout());
-            console.log('auth logout');
+            // console.log('auth logout');
         }
     }
     @Action(AuthStateActions.SetAuthState)
@@ -134,22 +125,9 @@ export class AuthState implements OnDestroy {
                     customer: customer.customer,
                 });
             });
-        // this.medusa.retrieveMedusaCustomer()
-        //     .pipe(takeUntil(this.subscription),
-        //         catchError(err => {
-        //             const error = throwError(() => new Error(JSON.stringify(err)));
-        //             return error;
-        //         }),)
-        //     .subscribe((customer: any) => {
-        //         console.log('retrieve cus', customer.customer);
-        //         ctx.patchState({
-        //             customer: customer.customer,
-        //         });
-        //     });
     }
     @Action(AuthStateActions.LoadStrapiUser)
     loadStrapiUser(ctx: StateContext<IAuthStateModel>, { userId }: AuthStateActions.LoadStrapiUser) {
-        const state = ctx.getState();
         this.strapi.loadUser(userId)
             .pipe(
                 catchError(err => {
@@ -160,7 +138,6 @@ export class AuthState implements OnDestroy {
             )
             .subscribe((user: any) => {
                 return ctx.patchState({
-                    ...state,
                     isLoggedIn: true,
                     userEmail: user.email,
                     user: user,
@@ -170,13 +147,6 @@ export class AuthState implements OnDestroy {
 
     @Action(AuthStateActions.SetToken)
     async setToken(ctx: StateContext<IAuthStateModel>, { token }: AuthStateActions.SetToken) {
-<<<<<<< HEAD
-        const state = ctx.getState();
-
-        // console.log(token);
-
-=======
->>>>>>> c23d452 (updates)
         ctx.patchState({
             token: token
         });

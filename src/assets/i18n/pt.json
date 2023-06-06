@@ -29,7 +29,7 @@
   "SAVE_EDITED_POINT": "Salve o ponto editado",
   "ADD_NEW_POINT": "Adicione o novo ponto",
   "home": {
-      "title": "Casa!"
+      "title": "Bem-vindo!"
   },
   "errors": {
       "auth": {

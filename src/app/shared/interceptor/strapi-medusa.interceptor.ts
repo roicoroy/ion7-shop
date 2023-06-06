@@ -21,7 +21,7 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
             const clonedReq = request;
             return next.handle(clonedReq) || null;
         }
-        if (request.url.indexOf(environment.MEDUSA_API_BASE_PATH) === 0 || request.url.indexOf(environment.MEDUSA_API_BASE_PATH) === 0) {
+        if (request.url.indexOf(environment.MEDUSA_API_BASE_PATH) === 0) {
             const clonedReq = this.medusaRequest(request);
             return next.handle(clonedReq) || null;
         }

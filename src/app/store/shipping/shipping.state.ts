@@ -40,22 +40,30 @@ export class ShippingState {
         return state.client_secret;
     }
 
+    @Action(ShippingActions.ClearPaymentSession)
+    async clearPaymentSession(ctx: StateContext<ShippingStateModel>) {
+        ctx.patchState({
+            payment_sessions: null
+        })
+    }
+
     @Action(ShippingActions.GetShippingOptions)
     async getShippingOptions(ctx: StateContext<ShippingStateModel>) {
-        const state = ctx.getState();
         const cartObj = this.store.selectSnapshot<any>((state: any) => state.cart?.cart);
-        this.medusaApi.shippingOptions(cartObj.id).pipe(
-            takeUntil(this.subscription),
-            catchError(err => {
-                const error = throwError(() => new Error(JSON.stringify(err)));
-                return error;
-            }),
-        ).subscribe((shipping_options: any) => {
-            return ctx.patchState({
-                ...state,
-                shipping_options: shipping_options.shipping_options,
+        if (cartObj) {
+            this.medusaApi.shippingOptions(cartObj.id).pipe(
+                takeUntil(this.subscription),
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),
+            ).subscribe((shipping_options: any) => {
+                console.log(shipping_options);
+                return ctx.patchState({
+                    shipping_options: shipping_options.shipping_options,
+                });
             });
-        });
+        }
     }
 
     @Action(ShippingActions.AddShippingMethod)
@@ -74,7 +82,6 @@ export class ShippingState {
                 }),
             ).subscribe((cart: any) => {
                 return ctx.patchState({
-                    ...state,
                     payment_sessions: cart.cart?.payment_sessions
                 });
             });
@@ -119,10 +126,11 @@ export class ShippingState {
 
     @Action(ShippingActions.LogOut)
     logout(ctx: StateContext<ShippingStateModel>) {
-        ctx.patchState({
+        ctx.setState({
             shipping_options: null,
             payment_sessions: null,
             provider_id: null,
+            client_secret: null,
         });
     }
 }

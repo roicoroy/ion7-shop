@@ -43,6 +43,7 @@ export class ShippingPage implements OnDestroy {
 
   constructor() {
     this.store.dispatch(new ShippingActions.GetShippingOptions());
+    this.store.dispatch(new ShippingActions.ClearPaymentSession());
     this.viewState$ = this.facade.viewState$;
     // this.viewState$
     //   .subscribe((vs) => {

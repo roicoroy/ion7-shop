@@ -35,7 +35,6 @@ export class LanguageComponent {
   }
   selectLanguage(item: any) {
     this.selectedLanguage = item?.code;
-    console.log(item?.code);
     this.translate.use(item?.code).subscribe(async () => {
       await this.storageService.storageSet(SAVED_LANGUAGE, this.selectedLanguage);
       await this.popoverController.dismiss();

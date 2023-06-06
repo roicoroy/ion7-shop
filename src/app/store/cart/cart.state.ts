@@ -345,9 +345,8 @@ export class CartState implements OnDestroy {
     }
     @Action(CartActions.LogOut)
     async logout(ctx: StateContext<CartStateModel>) {
-        ctx.setState({
+        ctx.patchState({
             cart: null,
-            recentCompletedOrder: null,
             selectedRegion: null,
             selectedCountry: null,
         });

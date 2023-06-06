@@ -1,22 +1,4 @@
-<ion-header [translucent]="true">
-  <ion-toolbar *ngIf="viewState$ | async as vs">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/start/tabs/home"></ion-back-button>
-    </ion-buttons>
-    <ion-buttons *ngIf="vs.user === null" slot="end">
-      <ion-button expand="block" fill="clear" shape="round">
-        Login
-      </ion-button>
-    </ion-buttons>
-    <ion-avatar slot="end" *ngIf="vs.user">
-      <img [src]="vs.user?.avatar.url" />
-    </ion-avatar>
-    <ion-title> Products List </ion-title>
-    <ion-buttons slot="end">
-      <cart-menu></cart-menu>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-header collapse="condense">

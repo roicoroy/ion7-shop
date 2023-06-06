@@ -35,7 +35,6 @@ import { scaleHeight } from 'src/app/shared/animations/animations';
   ],
 })
 export class ImagePickerComponent implements OnInit {
-  // @ViewChild('formElementRef', { static: false }) formElementRef: ElementRef<HTMLFormElement>;
   @Output() imagePick = new EventEmitter<any>();
   @Input() userAvatar: string;
   selectedImage: string;
@@ -52,18 +51,14 @@ export class ImagePickerComponent implements OnInit {
   }
 
   async onPickImage() {
-    // console.log('this.selectedImage');
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Prompt,
       quality: 50,
     });
     const savedPhoto = await this.savePicture(capturedPhoto);
-    console.log(savedPhoto);
     this.imagePick.emit(savedPhoto.webviewPath);
-    // this.selectedImage = await onLoadImage(savedPhoto);
     this.selectedImage = savedPhoto.webviewPath;
-    console.log(savedPhoto);
   }
   private async savePicture(cameraPhoto: Photo) {
     const base64Data = await this.readAsBase64(cameraPhoto);
@@ -95,19 +90,19 @@ export class ImagePickerComponent implements OnInit {
       };
       reader.readAsDataURL(blob);
     });
-  onFileChosen(event: Event) {
-    const pickedFile = (event.target as HTMLInputElement).files[0];
-    if (!pickedFile) {
-      return;
-    }
-    const fr = new FileReader();
-    fr.onload = () => {
-      const dataUrl = fr.result.toString();
-      this.selectedImage = dataUrl;
-      this.imagePick.emit(pickedFile);
-    };
-    fr.readAsDataURL(pickedFile);
-  }
+  // onFileChosen(event: Event) {
+  //   const pickedFile = (event.target as HTMLInputElement).files[0];
+  //   if (!pickedFile) {
+  //     return;
+  //   }
+  //   const fr = new FileReader();
+  //   fr.onload = () => {
+  //     const dataUrl = fr.result.toString();
+  //     this.selectedImage = dataUrl;
+  //     this.imagePick.emit(pickedFile);
+  //   };
+  //   fr.readAsDataURL(pickedFile);
+  // }
   private async readAsBase64(cameraPhoto: Photo) {
     if (this.platform.is('hybrid')) {
       const file = await Filesystem.readFile({
@@ -121,10 +116,10 @@ export class ImagePickerComponent implements OnInit {
     }
   }
 }
-export async function onLoadImage(savedPhoto: any) {
-  const readFile = await Filesystem.readFile({
-    path: savedPhoto.filepath,
-    directory: Directory.Data,
-  });
-  return `data:image/jpeg;base64,${readFile.data}`;
-}
+// export async function onLoadImage(savedPhoto: any) {
+//   const readFile = await Filesystem.readFile({
+//     path: savedPhoto.filepath,
+//     directory: Directory.Data,
+//   });
+//   return `data:image/jpeg;base64,${readFile.data}`;
+// }

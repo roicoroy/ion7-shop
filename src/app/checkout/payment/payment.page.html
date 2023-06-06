@@ -22,7 +22,6 @@
       <ion-col>
         <ng-container *ngIf="viewState$ | async as vs">
           <div *ngIf="vs?.secretKey as clientSecret">
-            {{ clientSecret }}
             <ngx-stripe-payment [clientSecret]="clientSecret"></ngx-stripe-payment>
           </div>
         </ng-container>
