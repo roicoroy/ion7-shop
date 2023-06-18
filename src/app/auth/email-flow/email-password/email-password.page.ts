@@ -4,13 +4,12 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, 
 import { IonicModule } from "@ionic/angular";
 import { TranslateModule } from "@ngx-translate/core";
 import { NgxsModule, Store } from "@ngxs/store";
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, takeUntil } from "rxjs";
 import { scaleHeight } from "src/app/shared/animations/animations";
 import { KeypadModule } from "src/app/shared/services/native/keyboard/keypad.module";
 import { NavigationService } from "src/app/shared/services/navigation/navigation.service";
 import { IStrapiLoginData } from "src/app/shared/types/types.interfaces";
 import { EmailPasswordFacade, IEmailPasswordFacadeState } from "./email-password.facade";
-import { FormComponentsModule } from "src/app/form-components/form-components.module";
 import { AppRoutePath } from "src/app/app.routers.model";
 import { NgxsFormPluginModule, UpdateFormValue } from "@ngxs/form-plugin";
 import { NgxsStoragePluginModule } from "@ngxs/storage-plugin";
@@ -33,7 +32,6 @@ import { NgxsStoragePluginModule } from "@ngxs/storage-plugin";
     NgxsFormPluginModule,
     NgxsStoragePluginModule,
     ReactiveFormsModule,
-    FormComponentsModule,
     KeypadModule
   ]
 })
@@ -78,18 +76,18 @@ export class EmailPasswordPage implements OnDestroy {
       ])),
     });
     this.viewState$ = this.facade.viewState$;
-    // this.viewState$
-    //   .pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe(async (vs) => {
-    //     console.log(vs);
-    //     if (vs.isLoggedIn) {
-    //       // await this.utility.presentLoading('...');
-    //       setTimeout(async () => {
-    //         this.navigation.navControllerDefault('start/tabs/home');
-    //         // await this.utility.dismissLoading();
-    //       }, 1000);
-    //     }
-    //   });
+    this.viewState$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(async (vs) => {
+        console.log(vs);
+        if (vs.isLoggedIn) {
+          // await this.utility.presentLoading('...');
+          setTimeout(async () => {
+            this.navigation.navControllerDefault('start/tabs/home');
+            // await this.utility.dismissLoading();
+          }, 1000);
+        }
+      });
   }
 
   ionViewDidEnter() {

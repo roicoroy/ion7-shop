@@ -1,17 +1,18 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxsFormPluginModule } from '@ngxs/form-plugin';
+import { NgxsFormPluginModule, UpdateFormValue } from '@ngxs/form-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule, Store } from '@ngxs/store';
-import Validation from 'src/app/form-components/validators/validation';
 import { IReqAuthRegister } from 'src/app/shared/types/requests/ReqAuthRegister';
 import { IErrorRes } from 'src/app/shared/types/responses/AuthError';
 import { EmailPasswordActions } from 'src/app/store/auth/email-password/email-password.actions';
 import { scaleHeight } from 'src/app/shared/animations/animations';
 import { KeypadModule } from 'src/app/shared/services/native/keyboard/keypad.module';
+import { NavigationService } from 'src/app/shared/services/navigation/navigation.service';
+import Validation from 'src/app/shared/utils/validation';
 
 @Component({
   selector: 'app-register',
@@ -30,7 +31,7 @@ import { KeypadModule } from 'src/app/shared/services/native/keyboard/keypad.mod
     NgxsModule,
     KeypadModule,
     NgxsFormPluginModule,
-    NgxsStoragePluginModule
+    NgxsStoragePluginModule,
   ]
 })
 export class RegisterPage implements OnInit {
@@ -38,30 +39,42 @@ export class RegisterPage implements OnInit {
   registerReq: IReqAuthRegister;
 
   private store = inject(Store);
-  
+  private navigation = inject(NavigationService);
+
   public error: IErrorRes;
-  
-  public registerForm: UntypedFormGroup = new UntypedFormGroup({
-    first_name: new UntypedFormControl('', [Validators.required]),
-    last_name: new UntypedFormControl('', [Validators.required]),
-    email: new UntypedFormControl(`${null}@test.com`, [
+
+  public registerForm: FormGroup = new FormGroup({
+    first_name: new FormControl(null, [Validators.required]),
+    last_name: new FormControl(null, [Validators.required]),
+    email: new FormControl(null, [
       Validators.required,
       Validators.email
     ]),
-    username: new UntypedFormControl('test', [Validators.required]),
-    password: new UntypedFormControl('Rwbento123!', [Validators.required]),
-    passwordConfirmation: new UntypedFormControl('Rwbento123!', [Validators.required])
-  },
-    {
-      validators: [Validation.match('password', 'passwordConfirmation')]
-    }
+    username: new FormControl(null, [Validators.required]),
+    password: new FormControl('Rwbento123!', [Validators.required]),
+    passwordConfirmation: new FormControl('Rwbento123!', [Validators.required])
+  }, { validators: [Validation.match('password', 'passwordConfirmation')] }
   );
+
+  ionViewDidEnter() {
+    this.store.dispatch([
+      new UpdateFormValue({
+        path: 'emailPassword.registerForm',
+        value: {
+          email: 'roicoroy@yahoo.com.br',
+          first_name: 'First Name',
+          last_name: 'Fast_ Name',
+          username: 'username'
+        },
+      }),
+    ]);
+  }
 
   ngOnInit() {
   }
-  public register(): void {
-    console.log(this.registerForm.value);
+
+  register(): void {
     this.registerReq = this.registerForm.value;
-    this.store.dispatch(new EmailPasswordActions.RegisterUser(this.registerReq))
+    this.store.dispatch(new EmailPasswordActions.RegisterUser(this.registerForm.value))
   }
 }

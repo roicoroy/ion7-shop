@@ -21,7 +21,7 @@ export class StrapiService {
     private token: string;
     headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
-        .append('Accept', 'application/json, */*');
+        // .append('Accept', 'application/json, */*');
     formHeaders = new HttpHeaders();
 
     strapiUser: any;

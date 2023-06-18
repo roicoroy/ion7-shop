@@ -23,45 +23,34 @@ export class EmailPasswordState {
 
     @Action(EmailPasswordActions.LoginEmailPassword)
     loginEmailPassword(ctx: StateContext<any>, { email, password }: EmailPasswordActions.LoginEmailPassword): any {
-        // const req: IStrapiUser = {
-        //     jwt: '123',
-        //     user: {
-        //         email: 'roicoroy@yahoo.com.br',
-        //         username: 'roicoroy',
-        //         id: '1'
-        //     }
-        // }
-        // this.store.dispatch(new AuthStateActions.SetAuthState(req));
         this.emailPasswordService.loginEmailPassword(email, password)
             .pipe(
-                tap((user: any) => {
-                    return this.store.dispatch(new AuthStateActions.SetAuthState(user));
-                }),
                 catchError(err => {
                     return throwError(() => new Error(JSON.stringify(err)));
                 }),
             )
-            .subscribe((res: any) => {
-                // console.log(res);
-                // // this.store.dispatch(new AuthStateActions.SetAuthState(user));
-                // // if (user.jwt && user.user) {
-                // //     // this.store.dispatch(new AuthStateActions.SetToken(user.jwt));
-                // //     // this.tokenService.setToken(user.jwt);
-                // //     this.store.dispatch(new AuthStateActions.SetAuthState(user));
-                // // }
-            });
+            .subscribe((user) => this.store.dispatch(new AuthStateActions.SetAuthState(user)));
     }
     @Action(EmailPasswordActions.RegisterUser)
     async registerUser(ctx: StateContext<any>, { registerForm }: EmailPasswordActions.RegisterUser) {
         console.log(registerForm);
-        this.emailPasswordService.registerEmailPassword(registerForm.email, registerForm.password)
-            .subscribe((res: any) => {
-                console.log(res);
-            });
+        this.emailPasswordService.registerEmailPassword(registerForm)
+            .pipe(
+                catchError(err => {
+                    return throwError(() => new Error(JSON.stringify(err)));
+                }),
+            )
+            .subscribe((user) => this.store.dispatch(new AuthStateActions.SetAuthState(user)));
     }
     @Action(EmailPasswordActions.ForgotPassword)
     async forgotPassword(ctx: StateContext<any>, { email }: EmailPasswordActions.ForgotPassword) {
-        console.log(email);
+        this.emailPasswordService.forgotPassword(email)
+            .pipe(
+                catchError(err => {
+                    return throwError(() => new Error(JSON.stringify(err)));
+                }),
+            )
+            .subscribe((user) => this.store.dispatch(new AuthStateActions.SetAuthState(user)));
     }
 }
 

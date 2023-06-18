@@ -1,17 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Input, OnInit, inject } from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { CustomComponentsModule } from 'src/app/components/components.module';
-import Validation from 'src/app/form-components/validators/validation';
 import { KeypadModule } from 'src/app/shared/services/native/keyboard/keypad.module';
 import { IUser } from 'src/app/shared/types/models/User';
 import { IErrorRes } from 'src/app/shared/types/responses/AuthError';
+import Validation from 'src/app/shared/utils/validation';
 
 @Component({
   selector: 'app-change-password-modal',

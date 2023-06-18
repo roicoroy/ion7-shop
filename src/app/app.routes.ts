@@ -31,11 +31,6 @@ export const routes: Routes = [
     loadComponent: () => import('./start/profile/addresses/address-details/address-details.page').then(m => m.AddressDetailsPage)
   },
   {
-    path: 'folder/:id',
-    loadComponent: () =>
-      import('./folder/folder.page').then((m) => m.FolderPage),
-  },
-  {
     path: 'start',
     loadChildren: () => import('./start/start.routes').then(m => m.routes)
   },

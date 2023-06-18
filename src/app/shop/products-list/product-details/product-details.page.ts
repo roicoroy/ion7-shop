@@ -4,9 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { CustomComponentsModule } from 'src/app/components/components.module';
 import { ShellModule } from 'src/app/components/shell/shell.module';
-import { FormComponentsModule } from 'src/app/form-components/form-components.module';
 import { NgxsModule, Store } from '@ngxs/store';
-import { Observable, Subject, take, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { CounterInputComponent } from 'src/app/components/components/counter-input/counter-input.component';
 import { NavigationService } from 'src/app/shared/services/navigation/navigation.service';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
@@ -15,7 +14,6 @@ import { ShopFacade } from '../../shop.facade';
 import { ProductsActions } from 'src/app/store/products/products.actions';
 import { register } from 'swiper/element/bundle';
 import { ActivatedRoute } from '@angular/router';
-import { IRegisterAddress } from 'src/app/shared/types/types.interfaces';
 
 register();
 
@@ -31,7 +29,6 @@ register();
     NgxsModule,
     NgxsFormPluginModule,
     NgxsStoragePluginModule,
-    FormComponentsModule,
     CustomComponentsModule,
     ShellModule
   ],

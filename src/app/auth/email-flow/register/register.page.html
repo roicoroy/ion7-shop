@@ -21,7 +21,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12">
-        <form [formGroup]="registerForm">
+        <form [formGroup]="registerForm" ngxsForm="emailPassword.registerForm">
           <ion-item class="form-group">
             <ion-label class="label" for="input-email">
               {{ 'First Name' | translate }}

@@ -137,7 +137,7 @@ export class AuthState implements OnDestroy {
                 takeUntil(this.subscription),
             )
             .subscribe((user: any) => {
-                return ctx.patchState({
+                ctx.patchState({
                     isLoggedIn: true,
                     userEmail: user.email,
                     user: user,

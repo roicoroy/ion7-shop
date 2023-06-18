@@ -3,7 +3,7 @@ import { State, Action, StateContext, Store } from "@ngxs/store";
 import { UserProfileActions } from "./user-profile.actions";
 import { UserProfileStateService } from "./user-profile.service";
 import { AuthStateActions } from "../auth/auth.actions";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, catchError, takeUntil, throwError } from "rxjs";
 
 export class UserProfileModel {
 }
@@ -33,6 +33,10 @@ export class UserProfileState implements OnDestroy {
         this.service.updateStrapiUserFcm(userId, action.fcmAccepted, '123')
             .pipe(
                 takeUntil(this.subscription),
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),
             )
             .subscribe((user) => {
                 this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
@@ -48,6 +52,10 @@ export class UserProfileState implements OnDestroy {
         if (userId) {
             this.service.updateStrapiUserProfile(userId, action.userForm).pipe(
                 takeUntil(this.subscription),
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),
             ).subscribe(() => {
                 this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));
             });
@@ -59,12 +67,20 @@ export class UserProfileState implements OnDestroy {
         this.service.uploadStrapiImageToServer(action.imageForm)
             .pipe(
                 takeUntil(this.subscription),
+                catchError(err => {
+                    const error = throwError(() => new Error(JSON.stringify(err)));
+                    return error;
+                }),
             )
             .subscribe((response: any) => {
                 const fileId = response[0].id;
                 this.service.setProfileImage(userId, fileId)
                     .pipe(
                         takeUntil(this.subscription),
+                        catchError(err => {
+                            const error = throwError(() => new Error(JSON.stringify(err)));
+                            return error;
+                        }),
                     )
                     .subscribe((user: any) => {
                         this.store.dispatch(new AuthStateActions.LoadStrapiUser(userId));

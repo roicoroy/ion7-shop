@@ -8,30 +8,38 @@ import { environment } from "src/environments/environment";
 })
 export class EmailPasswordService {
 
-    headers = new HttpHeaders().set('Content-Type', 'application/json');
-    httpOptions = {
-        headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-        }),
-        withCredentials: true,
-    };
+    private readonly headers = new HttpHeaders().set('Content-Type', 'application/json');
+    
     private http = inject(HttpClient);
 
     loginEmailPassword(email: string, password?: string) {
-        const strapiRequest = {
+        const req = {
             identifier: email,
             password,
         };
         // console.log(strapiRequest);
-        return this.http.post(`${environment.BASE_PATH}/api/auth/local`, strapiRequest, { headers: this.headers });
+        const url =`${environment.BASE_PATH}/api/auth/local`;
+        return this.http.post(url, req, { headers: this.headers });
     }
-    registerEmailPassword(email: string, password?: string) {
-        const strapiRequest: IReqAuthRegister = {
-            username: email,
-            email,
-            password,
+    registerEmailPassword(form: IReqAuthRegister) {
+        const req: IReqAuthRegister = {
+            first_name: form.first_name,
+            last_name: form.last_name,
+            username: form.email,
+            email: form.email,
+            password: form.password,
         };
-        // console.log(strapiRequest);
-        return this.http.post(`${environment.BASE_PATH}/api/auth/local`, strapiRequest, { headers: this.headers });
+        console.log(req);
+
+        const url = `${environment.BASE_PATH}/api/auth/local/register`;
+        return this.http.post(url, req, { headers: this.headers });
+    }
+    forgotPassword(email: string) {
+        const req = {
+            email,
+        };
+        console.log(req);
+        const url = `${environment.BASE_PATH}/api/passwordless/send-link`;
+        return this.http.post(url, req, { headers: this.headers })
     }
 }

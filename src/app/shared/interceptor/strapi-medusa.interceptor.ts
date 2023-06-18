@@ -39,22 +39,22 @@ export class StrapiMedusaInterceptor implements HttpInterceptor {
         return next.handle(request) || null;
     }
     private addToken(request: HttpRequest<any>, token: any) {
-        // console.log('medusa', request);
         if (token) {
             const clone: HttpRequest<any> = request.clone({
                 headers: new HttpHeaders({
-                    'Authorization': `Bearer ${token}`,
-                }),
+                    'Authorization': `Bearer ${token}`
+                })
             });
             return clone;
         }
         return request;
     }
     private medusaRequest(request: HttpRequest<any>) {
-        // console.log('medusa', request.url);
         const clone: HttpRequest<any> = request.clone({
             headers: new HttpHeaders({
-                'Content-Type': 'application/json',
+                'charset': 'utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Accept": "application/json"
             }),
             withCredentials: true,
         });

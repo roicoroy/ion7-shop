@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { AuthStateActions } from '../store/auth/auth.actions';
 import { AddressesActions } from '../store/addresses/addresses.actions';
 import { ShippingActions } from '../store/shipping/shipping.actions';
 

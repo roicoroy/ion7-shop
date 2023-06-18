@@ -39,6 +39,7 @@ import { UserProfileState } from './app/store/user-profile/user-profile.state';
 import "@angular/compiler";
 import { ErrorCatchingInterceptor } from './app/shared/interceptor/error.interceptor';
 import {CookieService} from 'ngx-cookie-service';
+import { Auth0State } from './app/store/auth/auth0/auth0.state';
 
 registerLocaleData(localeEn, 'en');
 registerLocaleData(localePt, 'pt');
@@ -83,6 +84,7 @@ bootstrapApplication(AppComponent, {
       }),
       NgxsModule.forRoot([
         EmailPasswordState,
+        Auth0State,
         AuthState,
         ErrorLoggingState,
         CustomerState,
